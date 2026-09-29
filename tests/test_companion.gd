@@ -25,11 +25,39 @@ func _follow_to(scene: Node2D, start: Vector2, destination: Vector2) -> void:
 		crossed_house = crossed_house or scene.MAIN_HOUSE.grow(3.5).has_point(companion.position)
 		crossed_house = crossed_house or scene.SMALL_HOUSE.grow(3.5).has_point(companion.position)
 	_check(not crossed_house, "Gela atravesó una casa.")
-	_check(companion.position.distance_to(player.position) <= 25.0, "Gela no llegó a Nisa rodeando la casa.")
+	_check(companion.position.distance_to(player.position) <= 34.0, "Gela no llegó a Nisa rodeando la casa.")
+	_check(companion.position.distance_to(player.position) >= 28.0, "Gela se detiene demasiado cerca de Nisa.")
 	var resting_position: Vector2 = companion.position
 	for frame in range(30):
 		await physics_frame
 	_check(companion.position.distance_to(resting_position) < 0.1, "Gela no descansa junto a Nisa.")
+
+
+func _check_gate_following(scene: Node2D) -> void:
+	var player = scene.get_node("Nisa")
+	var companion = scene.get_node("Gela")
+	player.position = Vector2(110, 125)
+	companion.position = player.position
+	companion.path_timer = 0.0
+	for frame in range(90):
+		await physics_frame
+	_check(companion.position.distance_to(player.position) >= 28.0, "Gela permanece encima de Nisa en vez de apartarse.")
+	Input.action_press("move_up")
+	for frame in range(90):
+		await physics_frame
+	Input.action_release("move_up")
+	for frame in range(90):
+		await physics_frame
+	_check(companion.position.distance_to(player.position) >= 28.0, "Gela tapa a Nisa al llegar al portón.")
+	var previous_position: Vector2 = companion.position
+	Input.action_press("move_down")
+	for frame in range(95):
+		await physics_frame
+	Input.action_release("move_down")
+	for frame in range(90):
+		await physics_frame
+	_check(companion.position.distance_to(previous_position) > 20.0, "Gela no reanuda el seguimiento después del portón.")
+	_check(companion.position.distance_to(player.position) <= 34.0, "Gela pierde a Nisa después de cambiar de dirección.")
 
 
 func _run() -> void:
@@ -83,6 +111,8 @@ func _run() -> void:
 
 	await _follow_to(scene, Vector2(180, 85), Vector2(370, 175))
 	await _follow_to(scene, Vector2(105, 238), Vector2(285, 238))
+
+	await _check_gate_following(scene)
 
 	# Volver a hablar con la abuela pausa a ambas y no reinicia a Gela.
 	player.position = story.FAMILY_POSITION + Vector2(0, 12)

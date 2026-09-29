@@ -137,6 +137,25 @@ func get_companion_path(from: Vector2, to: Vector2) -> PackedVector2Array:
 	return companion_grid.get_point_path(_nearest_walkable_cell(from), _nearest_walkable_cell(to))
 
 
+func get_companion_rest_position(player_position: Vector2, away: Vector2, distance: float) -> Vector2:
+	var desired := player_position + away.normalized() * distance
+	var closest := desired
+	var best_score := INF
+	for x in range(80):
+		for y in range(45):
+			var cell := Vector2i(x, y)
+			if companion_grid.is_point_solid(cell):
+				continue
+			var point := companion_grid.get_point_position(cell)
+			if point.distance_to(player_position) < distance:
+				continue
+			var score := point.distance_squared_to(desired)
+			if score < best_score:
+				best_score = score
+				closest = point
+	return closest
+
+
 func _nearest_walkable_cell(point: Vector2) -> Vector2i:
 	var closest := Vector2i.ZERO
 	var best_distance := INF
