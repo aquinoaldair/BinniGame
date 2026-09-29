@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 const WALK_SPEED := 78.0
-const ROOM_BOUNDS := Rect2(Vector2(31, 43), Vector2(418, 205))
+const ROOM_BOUNDS := Rect2(Vector2(34, 59), Vector2(411, 186))
 
 var facing := Vector2.DOWN
 var walk_phase := 0.0

@@ -1,8 +1,8 @@
 extends Node2D
 
 # Relato ficticio provisional: no incluye traducciones ni costumbres atribuidas a la región.
-const FAMILY_POSITION := Vector2(240, 92)
-const OBJECT_POSITION := Vector2(365, 174)
+const FAMILY_POSITION := Vector2(328, 156)
+const OBJECT_POSITION := Vector2(398, 188)
 const INTERACTION_DISTANCE := 32.0
 
 enum Stage { MEET, SEARCH, RETURN, COMPLETE }
@@ -25,7 +25,7 @@ func _ready() -> void:
 	add_child(layer)
 
 	objective = Label.new()
-	objective.position = Vector2(12, 39)
+	objective.position = Vector2(12, 23)
 	objective.add_theme_font_size_override("font_size", 9)
 	objective.add_theme_color_override("font_color", Color("fff2cb"))
 	objective.mouse_filter = Control.MOUSE_FILTER_IGNORE

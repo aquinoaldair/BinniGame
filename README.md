@@ -21,4 +21,4 @@ Habla con Bixhozegola, busca el cuaderno al lado derecho del patio y regresa par
 
 Este relato es ficción provisional en español; no incluye traducciones ni representa una costumbre regional verificada.
 
-Esta primera escena permite caminar por el patio de Guidxiguie', conversar y completar un objetivo sencillo. El personaje y el escenario usan formas dibujadas con código como arte provisional. Después añadiremos BinniGela y elementos gráficos definitivos.
+Esta primera escena permite caminar por un patio sin nombre, conversar y completar un objetivo sencillo. El diseño visto desde arriba incluye dos casas con techos de teja, césped, senderos, jardineras y un patio de losetas rojizas. Las casas bloquean el paso; el portón aún no cambia de escena. El personaje y el escenario usan formas dibujadas con código como arte provisional. Después añadiremos BinniGela y elementos gráficos definitivos.

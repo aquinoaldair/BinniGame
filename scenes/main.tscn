@@ -4,11 +4,11 @@
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
 [ext_resource type="Script" path="res://scripts/patio_story.gd" id="3_story"]
 
-[node name="Guidxiguie" type="Node2D"]
+[node name="Patio" type="Node2D"]
 script = ExtResource("1_world")
 
 [node name="Nisa" parent="." instance=ExtResource("2_player")]
-position = Vector2(240, 174)
+position = Vector2(246, 182)
 
 [node name="PatioStory" type="Node2D" parent="."]
 script = ExtResource("3_story")
