@@ -5,11 +5,16 @@ const TouchControls = preload("res://scripts/touch_controls.gd")
 
 const MAIN_HOUSE := Rect2(212, 54, 232, 76)
 const SMALL_HOUSE := Rect2(128, 216, 112, 36)
+const WALKABLE_BOUNDS := Rect2(Vector2(34, 59), Vector2(411, 186))
+const PATH_CELL_SIZE := 6.0
+
+var companion_grid := AStarGrid2D.new()
 
 
 func _ready() -> void:
 	_add_building_collision(MAIN_HOUSE)
 	_add_building_collision(SMALL_HOUSE)
+	_build_companion_grid()
 	var layer := CanvasLayer.new()
 	layer.layer = 5
 	add_child(layer)
@@ -109,6 +114,43 @@ func _add_building_collision(bounds: Rect2) -> void:
 	collision.shape = shape
 	body.add_child(collision)
 	add_child(body)
+
+
+func _build_companion_grid() -> void:
+	companion_grid.region = Rect2i(0, 0, 80, 45)
+	companion_grid.cell_size = Vector2.ONE * PATH_CELL_SIZE
+	companion_grid.offset = Vector2.ONE * PATH_CELL_SIZE * 0.5
+	companion_grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
+	companion_grid.update()
+	# Margen para que el cuerpo de la iguana no roce ni atraviese las casas.
+	for x in range(80):
+		for y in range(45):
+			var cell := Vector2i(x, y)
+			var point := companion_grid.get_point_position(cell)
+			var blocked := not WALKABLE_BOUNDS.has_point(point)
+			blocked = blocked or MAIN_HOUSE.grow(6).has_point(point)
+			blocked = blocked or SMALL_HOUSE.grow(6).has_point(point)
+			companion_grid.set_point_solid(cell, blocked)
+
+
+func get_companion_path(from: Vector2, to: Vector2) -> PackedVector2Array:
+	return companion_grid.get_point_path(_nearest_walkable_cell(from), _nearest_walkable_cell(to))
+
+
+func _nearest_walkable_cell(point: Vector2) -> Vector2i:
+	var closest := Vector2i.ZERO
+	var best_distance := INF
+	# El patio es pequeño; esto también resuelve destinos pegados al muro o al techo.
+	for x in range(80):
+		for y in range(45):
+			var cell := Vector2i(x, y)
+			if companion_grid.is_point_solid(cell):
+				continue
+			var distance := point.distance_squared_to(companion_grid.get_point_position(cell))
+			if distance < best_distance:
+				best_distance = distance
+				closest = cell
+	return closest
 
 
 func _draw_lawn(bounds: Rect2) -> void:

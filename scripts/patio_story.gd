@@ -16,7 +16,9 @@ var objective: Label
 var dialogue_panel: Panel
 var dialogue_text: Label
 var next_button: Button
+var pending_companion := false
 @onready var player = get_parent().get_node("Nisa")
+@onready var companion = get_parent().get_node("Gela")
 
 
 func _ready() -> void:
@@ -76,18 +78,33 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 
 func _nearby_action() -> String:
-	if player.position.distance_to(FAMILY_POSITION) <= INTERACTION_DISTANCE:
-		return "Hablar"
-	if stage == Stage.SEARCH and player.position.distance_to(OBJECT_POSITION) <= INTERACTION_DISTANCE:
-		return "Recoger"
-	return ""
+	var action := ""
+	var closest := INTERACTION_DISTANCE
+	var family_distance: float = player.position.distance_to(FAMILY_POSITION)
+	if family_distance <= closest:
+		closest = family_distance
+		action = "Hablar"
+	var object_distance: float = player.position.distance_to(OBJECT_POSITION)
+	if stage == Stage.SEARCH and object_distance < closest:
+		closest = object_distance
+		action = "Recoger"
+	var companion_distance: float = player.position.distance_to(companion.position)
+	if stage == Stage.COMPLETE and companion.available and not companion.following and companion_distance < closest:
+		action = "Saludar"
+	return action
 
 
 func _interact() -> void:
 	if not dialogue.is_empty():
 		return
 	var action := _nearby_action()
-	if action == "Recoger":
+	if action == "Saludar":
+		pending_companion = true
+		_start_dialogue([
+			"Nisa: ¡Hola, Gela! ¿Quieres explorar el patio conmigo?",
+			"Gela se acerca a Nisa y se queda a su lado."
+		], stage)
+	elif action == "Recoger":
 		_start_dialogue(["Nisa: Aquí está el cuaderno. Quizá sus páginas nos ayuden a recordar."], Stage.RETURN)
 	elif action == "Hablar":
 		match stage:
@@ -135,6 +152,11 @@ func _advance_dialogue() -> void:
 	dialogue_panel.hide()
 	player.can_move = true
 	stage = pending_stage
+	if stage == Stage.COMPLETE:
+		companion.appear()
+	if pending_companion:
+		companion.start_following(player)
+		pending_companion = false
 	_update_objective()
 	queue_redraw()
 
@@ -144,7 +166,8 @@ func _update_objective() -> void:
 		Stage.MEET: objective.text = "Acércate a Bixhozegola junto al banco y habla."
 		Stage.SEARCH: objective.text = "Busca el cuaderno al lado derecho del patio."
 		Stage.RETURN: objective.text = "Regresa con Bixhozegola y comparte el cuaderno."
-		Stage.COMPLETE: objective.text = "Recuerdo compartido · Primer encuentro completado."
+		Stage.COMPLETE:
+			objective.text = "Explora el patio con Gela." if companion.following else "Busca a Gela en el jardín y salúdala."
 
 
 func _draw() -> void:

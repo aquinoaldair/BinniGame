@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/gela.gd" id="1_iguana"]
+
+[sub_resource type="CircleShape2D" id="CircleShape_iguana"]
+radius = 4.0
+
+[node name="Gela" type="CharacterBody2D"]
+visible = false
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_iguana")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape_iguana")
+disabled = true

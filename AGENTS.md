@@ -4,7 +4,7 @@
 
 Estamos creando un juego de aventura 2D para móviles con Godot 4 y GDScript. La historia ocurre en un pueblo ficticio inspirado en el Istmo de Tehuantepec.
 
-Nisa explora el pueblo con BinniGela, una iguana compañera. El conflicto central es que se olvidan palabras, relatos y lugares en zapoteco, y con esa pérdida se debilita el mundo antiguo de Lidxi Gula. El tema principal es la memoria y la transmisión de la lengua entre generaciones.
+Nisa explora el pueblo con Gela, una iguana compañera. El conflicto central es que se olvidan palabras, relatos y lugares en zapoteco, y con esa pérdida se debilita el mundo antiguo de Lidxi Gula. El tema principal es la memoria y la transmisión de la lengua entre generaciones.
 
 El primer prototipo es un patio donde Nisa puede caminar. Desarrolla el juego poco a poco, con pasos pequeños y jugables. Explica los cambios en español.
 
@@ -20,8 +20,11 @@ This repository contains **BINNI: El corazón del viento**, a Godot 4.7 prototyp
 - `scripts/player.gd`: movement, room bounds, and procedural character drawing.
 - `scripts/world.gd`: courtyard drawing and HUD creation.
 - `scripts/touch_controls.gd`: touch input and directional controls.
+- `scenes/gela.tscn` and `scripts/gela.gd`: companion drawing, collision, and following; `world.gd` provides courtyard paths.
+- `scripts/patio_story.gd`: conversations, companion encounter, and notebook objective.
+- `tests/test_companion.gd`: headless integration checks.
 
-Artwork currently uses drawing functions; there is no dedicated asset directory or test directory. Treat `.godot/` as generated editor data, not source.
+Artwork currently uses drawing functions; there is no dedicated asset directory. Treat `.godot/` as generated editor data, not source.
 
 ## Build, Test, and Development Commands
 
@@ -41,7 +44,7 @@ Use `res://` resource paths and existing `move_left`, `move_right`, `move_up`, a
 
 ## Testing Guidelines
 
-No automated framework or coverage threshold exists. Manually verify WASD, arrow keys, diagonal movement, stopping animation, and courtyard bounds. For touch changes, check pressing, dragging, releasing, and multiple fingers on a touch-capable device. Check HUD readability at the 480×270 viewport and inspect debugger errors.
+Run `godot --headless --path . --script res://tests/test_companion.gd` for companion and story integration checks. No external testing framework or coverage threshold exists. Manually verify WASD, arrow keys, diagonal movement, stopping animation, and courtyard bounds. For touch changes, check pressing, dragging, releasing, and multiple fingers on a touch-capable device. Check HUD readability at the 480×270 viewport and inspect debugger errors.
 
 ## Commit & Pull Request Guidelines
 
