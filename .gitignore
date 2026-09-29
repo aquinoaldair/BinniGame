@@ -1,0 +1,11 @@
+# Caché e importaciones generadas por Godot.
+.godot/
+
+# Configuración local del entorno de trabajo.
+.agents/
+.aws/
+.codex/
+
+# Archivos del sistema operativo.
+.DS_Store
+Thumbs.db
