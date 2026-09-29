@@ -1,5 +1,7 @@
 extends Node2D
 
+signal progress_committed
+
 # Relato ficticio provisional: no incluye traducciones ni costumbres atribuidas a la región.
 const FAMILY_POSITION := Vector2(328, 156)
 const OBJECT_POSITION := Vector2(398, 188)
@@ -159,6 +161,7 @@ func _advance_dialogue() -> void:
 		pending_companion = false
 	_update_objective()
 	queue_redraw()
+	progress_committed.emit()
 
 
 func _update_objective() -> void:

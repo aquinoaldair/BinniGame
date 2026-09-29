@@ -23,6 +23,8 @@ This repository contains **BINNI: El corazón del viento**, a Godot 4.7 prototyp
 - `scenes/gela.tscn` and `scripts/gela.gd`: companion drawing, collision, and following; `world.gd` provides courtyard paths.
 - `scripts/patio_story.gd`: conversations, companion encounter, and notebook objective.
 - `tests/test_companion.gd`: headless integration checks.
+- `scripts/save_session.gd`: start menu and autosave; `scripts/save_store.gd`: validated JSON storage and backup recovery.
+- `tests/test_save.gd`: save and menu integration checks with isolated files.
 
 Artwork currently uses drawing functions; there is no dedicated asset directory. Treat `.godot/` as generated editor data, not source.
 
@@ -45,6 +47,8 @@ Use `res://` resource paths and existing `move_left`, `move_right`, `move_up`, a
 ## Testing Guidelines
 
 Run `godot --headless --path . --script res://tests/test_companion.gd` for companion and story integration checks. No external testing framework or coverage threshold exists. Manually verify WASD, arrow keys, diagonal movement, stopping animation, and courtyard bounds. For touch changes, check pressing, dragging, releasing, and multiple fingers on a touch-capable device. Check HUD readability at the 480×270 viewport and inspect debugger errors.
+
+Run `godot --headless --path . --script res://tests/test_save.gd` for persistence changes. Keep test saves separate from `user://partida.json`. Preserve the versioned format and the rule that Gela appears only after notebook delivery. New objectives must save only committed progress so interrupted dialogues can be replayed.
 
 ## Commit & Pull Request Guidelines
 

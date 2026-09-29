@@ -18,7 +18,15 @@ Primer prototipo jugable en Godot 4.7, escrito en GDScript.
 
 ## Primer encuentro
 
-Habla con Bixhozegola, busca el cuaderno al lado derecho del patio y regresa para compartir un recuerdo. Nisa se detiene durante las conversaciones. El objetivo aparece en la parte superior. El progreso es temporal y se reinicia al ejecutar de nuevo el proyecto.
+Habla con Bixhozegola, busca el cuaderno al lado derecho del patio y regresa para compartir un recuerdo. Nisa se detiene durante las conversaciones. El objetivo aparece en la parte superior.
+
+## Guardado de partida
+
+Al abrir el proyecto, elige **Continuar** para recuperar tu partida o **Nueva partida** para empezar desde cero. Continuar se desactiva si no hay un guardado válido. Nueva partida pide confirmación antes de reemplazar los datos existentes.
+
+La partida se guarda localmente en `user://partida.json`, con respaldo en `user://partida.json.bak`. Conserva el progreso del cuaderno, la aparición y el seguimiento de Gela y las posiciones de ambas. Hay autoguardado al cerrar conversaciones, cada diez segundos y al perder el foco, pasar a segundo plano o cerrar la ventana. Si sales durante un diálogo, se repite desde el último objetivo completado.
+
+Si el archivo principal está dañado, Continuar intenta recuperar el respaldo. Una partida nueva reemplaza también ese respaldo. En el editor, **Proyecto → Abrir carpeta de datos de usuario** permite localizar los archivos. Este guardado es local al dispositivo.
 
 Este relato es ficción provisional en español; no incluye traducciones ni representa una costumbre regional verificada.
 
@@ -27,3 +35,5 @@ Esta primera escena permite caminar por un patio sin nombre, conversar, completa
 ## Prueba de integración
 
 Con Godot en el `PATH`, ejecuta `godot --headless --path . --script res://tests/test_companion.gd`. Comprueba el encuentro, el seguimiento alrededor de las dos casas, el descanso, la pausa en diálogos y la misión del cuaderno. El proceso termina con código distinto de cero si falla una comprobación.
+
+Ejecuta también `godot --headless --path . --script res://tests/test_save.gd` para comprobar el menú, el autoguardado, la recuperación del progreso y el respaldo. Esta prueba usa archivos aislados y no modifica tu partida.

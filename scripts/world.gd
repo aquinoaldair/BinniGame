@@ -1,6 +1,10 @@
 extends Node2D
 
 const TouchControls = preload("res://scripts/touch_controls.gd")
+const SaveSession = preload("res://scripts/save_session.gd")
+
+@export var start_menu_enabled := true
+@export var save_path := "user://partida.json"
 
 
 const MAIN_HOUSE := Rect2(212, 54, 232, 76)
@@ -30,6 +34,10 @@ func _ready() -> void:
 	var controls := TouchControls.new()
 	controls.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	layer.add_child(controls)
+	if start_menu_enabled:
+		var session := SaveSession.new()
+		session.name = "SaveSession"
+		add_child(session)
 
 
 func _draw() -> void:
@@ -135,6 +143,16 @@ func _build_companion_grid() -> void:
 
 func get_companion_path(from: Vector2, to: Vector2) -> PackedVector2Array:
 	return companion_grid.get_point_path(_nearest_walkable_cell(from), _nearest_walkable_cell(to))
+
+
+func safe_save_position(point: Vector2) -> Vector2:
+	var clamped := Vector2(
+		clampf(point.x, WALKABLE_BOUNDS.position.x, WALKABLE_BOUNDS.end.x),
+		clampf(point.y, WALKABLE_BOUNDS.position.y, WALKABLE_BOUNDS.end.y)
+	)
+	if MAIN_HOUSE.grow(7).has_point(clamped) or SMALL_HOUSE.grow(7).has_point(clamped):
+		return companion_grid.get_point_position(_nearest_walkable_cell(clamped))
+	return clamped
 
 
 func get_companion_rest_position(player_position: Vector2, away: Vector2, distance: float) -> Vector2:

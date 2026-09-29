@@ -62,6 +62,7 @@ func _check_gate_following(scene: Node2D) -> void:
 
 func _run() -> void:
 	var scene = load("res://scenes/main.tscn").instantiate()
+	scene.start_menu_enabled = false
 	root.add_child(scene)
 	await process_frame
 	var player = scene.get_node("Nisa")
