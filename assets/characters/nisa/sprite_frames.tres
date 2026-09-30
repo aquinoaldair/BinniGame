@@ -1,0 +1,159 @@
+[gd_resource type="SpriteFrames" load_steps=26 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/nisa/nisa_atlas.png" id="1_atlas"]
+
+[sub_resource type="AtlasTexture" id="Atlas_0"]
+atlas = ExtResource("1_atlas")
+region = Rect2(97, 11, 119, 231)
+margin = Rect2(100.5, 76, 201, 89)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_1"]
+atlas = ExtResource("1_atlas")
+region = Rect2(347, 11, 120, 231)
+margin = Rect2(99.0, 76, 200, 89)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_2"]
+atlas = ExtResource("1_atlas")
+region = Rect2(579, 11, 128, 233)
+margin = Rect2(92.5, 74, 192, 87)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_3"]
+atlas = ExtResource("1_atlas")
+region = Rect2(813, 12, 125, 232)
+margin = Rect2(93.5, 75, 195, 88)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_4"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1056, 11, 129, 235)
+margin = Rect2(92.5, 72, 191, 85)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_5"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1318, 11, 129, 234)
+margin = Rect2(93.5, 73, 191, 86)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_6"]
+atlas = ExtResource("1_atlas")
+region = Rect2(96, 253, 120, 245)
+margin = Rect2(99.0, 62, 200, 75)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_7"]
+atlas = ExtResource("1_atlas")
+region = Rect2(347, 253, 120, 245)
+margin = Rect2(99.0, 62, 200, 75)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_8"]
+atlas = ExtResource("1_atlas")
+region = Rect2(581, 253, 126, 248)
+margin = Rect2(95.0, 59, 194, 72)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_9"]
+atlas = ExtResource("1_atlas")
+region = Rect2(820, 253, 125, 248)
+margin = Rect2(98.0, 59, 195, 72)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_10"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1060, 253, 132, 247)
+margin = Rect2(96.0, 60, 188, 73)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_11"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1318, 253, 139, 245)
+margin = Rect2(92.0, 62, 181, 75)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_12"]
+atlas = ExtResource("1_atlas")
+region = Rect2(104, 511, 118, 241)
+margin = Rect2(113.5, 66, 202, 79)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_13"]
+atlas = ExtResource("1_atlas")
+region = Rect2(357, 511, 118, 242)
+margin = Rect2(112.0, 65, 202, 78)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_14"]
+atlas = ExtResource("1_atlas")
+region = Rect2(589, 511, 135, 240)
+margin = Rect2(106.0, 67, 185, 80)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_15"]
+atlas = ExtResource("1_atlas")
+region = Rect2(824, 512, 145, 239)
+margin = Rect2(93.0, 68, 175, 81)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_16"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1063, 511, 154, 239)
+margin = Rect2(90.0, 68, 166, 81)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_17"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1328, 512, 149, 239)
+margin = Rect2(91.5, 68, 171, 81)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_18"]
+atlas = ExtResource("1_atlas")
+region = Rect2(76, 760, 125, 242)
+margin = Rect2(87.0, 65, 195, 78)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_19"]
+atlas = ExtResource("1_atlas")
+region = Rect2(328, 761, 126, 241)
+margin = Rect2(85.5, 66, 194, 79)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_20"]
+atlas = ExtResource("1_atlas")
+region = Rect2(563, 760, 151, 243)
+margin = Rect2(77.5, 64, 169, 77)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_21"]
+atlas = ExtResource("1_atlas")
+region = Rect2(795, 760, 151, 243)
+margin = Rect2(77.5, 64, 169, 77)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_22"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1047, 760, 157, 243)
+margin = Rect2(72.5, 64, 163, 77)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_23"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1312, 760, 151, 242)
+margin = Rect2(77.0, 65, 169, 78)
+filter_clip = true
+
+[resource]
+animations = [
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_0")}, {"duration": 1.0, "texture": SubResource("Atlas_1")}], "loop": true, "name": &"idle_down", "speed": 2.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_2")}, {"duration": 1.0, "texture": SubResource("Atlas_3")}, {"duration": 1.0, "texture": SubResource("Atlas_4")}, {"duration": 1.0, "texture": SubResource("Atlas_5")}], "loop": true, "name": &"walk_down", "speed": 7.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_6")}, {"duration": 1.0, "texture": SubResource("Atlas_7")}], "loop": true, "name": &"idle_up", "speed": 2.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_8")}, {"duration": 1.0, "texture": SubResource("Atlas_9")}, {"duration": 1.0, "texture": SubResource("Atlas_10")}, {"duration": 1.0, "texture": SubResource("Atlas_11")}], "loop": true, "name": &"walk_up", "speed": 7.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_12")}, {"duration": 1.0, "texture": SubResource("Atlas_13")}], "loop": true, "name": &"idle_left", "speed": 2.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_14")}, {"duration": 1.0, "texture": SubResource("Atlas_15")}, {"duration": 1.0, "texture": SubResource("Atlas_16")}, {"duration": 1.0, "texture": SubResource("Atlas_17")}], "loop": true, "name": &"walk_left", "speed": 7.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_18")}, {"duration": 1.0, "texture": SubResource("Atlas_19")}], "loop": true, "name": &"idle_right", "speed": 2.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_20")}, {"duration": 1.0, "texture": SubResource("Atlas_21")}, {"duration": 1.0, "texture": SubResource("Atlas_22")}, {"duration": 1.0, "texture": SubResource("Atlas_23")}], "loop": true, "name": &"walk_right", "speed": 7.0}
+]

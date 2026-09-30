@@ -2,6 +2,14 @@ extends Node2D
 
 const TouchControls = preload("res://scripts/touch_controls.gd")
 const SaveSession = preload("res://scripts/save_session.gd")
+const PatioPresentation = preload("res://scripts/presentation/patio_presentation.gd")
+const PatioCamera = preload("res://scripts/presentation/patio_camera.gd")
+const PatioUI = preload("res://scripts/presentation/patio_ui.gd")
+
+@export var modern_patio_enabled := true
+@export var preview_touch_controls := false
+var hint: Label
+var controls: Control
 
 @export var start_menu_enabled := true
 @export var save_path := "user://partida.json"
@@ -13,17 +21,24 @@ const WALKABLE_BOUNDS := Rect2(Vector2(34, 59), Vector2(411, 186))
 const PATH_CELL_SIZE := 6.0
 
 var companion_grid := AStarGrid2D.new()
+var zone := "patio"
+const STREET_HOUSES := [Rect2(28, 52, 143, 65), Rect2(325, 52, 124, 65)]
+const FOUNTAIN_BOUNDS := Rect2(205, 115, 40, 40)
+var building_bodies: Array[StaticBody2D] = []
 
 
 func _ready() -> void:
 	_add_building_collision(MAIN_HOUSE)
 	_add_building_collision(SMALL_HOUSE)
+	for bounds in STREET_HOUSES + [FOUNTAIN_BOUNDS]:
+		_add_building_collision(bounds)
+	_update_building_collisions()
 	_build_companion_grid()
 	var layer := CanvasLayer.new()
 	layer.layer = 5
 	add_child(layer)
 
-	var hint := Label.new()
+	hint = Label.new()
 	hint.text = "Mueve a Nisa  ·  WASD / flechas  ·  toca las flechas en móvil"
 	hint.position = Vector2(12, 9)
 	hint.add_theme_font_size_override("font_size", 7)
@@ -31,9 +46,25 @@ func _ready() -> void:
 	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	layer.add_child(hint)
 
-	var controls := TouchControls.new()
+	controls = TouchControls.new()
 	controls.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	layer.add_child(controls)
+	var presentation := PatioPresentation.new()
+	presentation.name = "PatioPresentation"
+	presentation.world = self
+	add_child(presentation)
+	var camera := PatioCamera.new()
+	camera.name = "PatioCamera"
+	camera.world = self
+	camera.player = get_node("Nisa")
+	add_child(camera)
+	var ui := PatioUI.new()
+	ui.name = "PatioUI"
+	ui.world = self
+	ui.story = get_node("PatioStory")
+	add_child(ui)
+	y_sort_enabled = modern_patio_enabled
+	get_node("Nisa").sync_presentation()
 	if start_menu_enabled:
 		var session := SaveSession.new()
 		session.name = "SaveSession"
@@ -41,6 +72,11 @@ func _ready() -> void:
 
 
 func _draw() -> void:
+	if zone == "street":
+		_draw_street()
+		return
+	if modern_patio_enabled:
+		return
 	# Composición ficticia inspirada en la referencia; sin rótulos sobre el mapa.
 	draw_rect(Rect2(0, 0, 480, 270), Color("454943"))
 	draw_rect(Rect2(18, 43, 444, 217), Color("b9b3a2"))
@@ -104,8 +140,16 @@ func _draw() -> void:
 	draw_rect(Rect2(18, 51, 9, 209), Color("d3c9b1"))
 	draw_rect(Rect2(453, 51, 9, 209), Color("d3c9b1"))
 	draw_rect(Rect2(18, 252, 444, 8), Color("ddd4bf"))
-	draw_rect(Rect2(53, 44, 142, 7), Color("282c29"))
+	var story = get_node_or_null("PatioStory")
+	var gate_open: bool = story != null and story.stage == story.Stage.COMPLETE and get_node("Gela").following
+	if gate_open:
+		draw_rect(Rect2(53, 44, 20, 7), Color("282c29"))
+		draw_rect(Rect2(175, 44, 20, 7), Color("282c29"))
+	else:
+		draw_rect(Rect2(53, 44, 142, 7), Color("282c29"))
 	for slat in range(18):
+		if gate_open and slat > 2 and slat < 15:
+			continue
 		draw_line(Vector2(56 + slat * 8, 45), Vector2(56 + slat * 8, 50), Color("656b61"), 1)
 
 	# Franja de interfaz separada del jardín.
@@ -122,6 +166,26 @@ func _add_building_collision(bounds: Rect2) -> void:
 	collision.shape = shape
 	body.add_child(collision)
 	add_child(body)
+	building_bodies.append(body)
+
+
+func set_zone(next_zone: String) -> void:
+	zone = next_zone
+	y_sort_enabled = zone == "patio" and modern_patio_enabled
+	get_node("Nisa").sync_presentation()
+	_update_building_collisions()
+	_build_companion_grid()
+	queue_redraw()
+
+
+func _update_building_collisions() -> void:
+	for index in range(building_bodies.size()):
+		var active := (index < 2) if zone == "patio" else (index >= 2)
+		building_bodies[index].get_child(0).set_deferred("disabled", not active)
+
+
+func _blocked_buildings() -> Array:
+	return [MAIN_HOUSE, SMALL_HOUSE] if zone == "patio" else STREET_HOUSES + [FOUNTAIN_BOUNDS]
 
 
 func _build_companion_grid() -> void:
@@ -136,8 +200,8 @@ func _build_companion_grid() -> void:
 			var cell := Vector2i(x, y)
 			var point := companion_grid.get_point_position(cell)
 			var blocked := not WALKABLE_BOUNDS.has_point(point)
-			blocked = blocked or MAIN_HOUSE.grow(6).has_point(point)
-			blocked = blocked or SMALL_HOUSE.grow(6).has_point(point)
+			for building in _blocked_buildings():
+				blocked = blocked or building.grow(6).has_point(point)
 			companion_grid.set_point_solid(cell, blocked)
 
 
@@ -150,9 +214,46 @@ func safe_save_position(point: Vector2) -> Vector2:
 		clampf(point.x, WALKABLE_BOUNDS.position.x, WALKABLE_BOUNDS.end.x),
 		clampf(point.y, WALKABLE_BOUNDS.position.y, WALKABLE_BOUNDS.end.y)
 	)
-	if MAIN_HOUSE.grow(7).has_point(clamped) or SMALL_HOUSE.grow(7).has_point(clamped):
-		return companion_grid.get_point_position(_nearest_walkable_cell(clamped))
+	for building in _blocked_buildings():
+		if building.grow(7).has_point(clamped):
+			return companion_grid.get_point_position(_nearest_walkable_cell(clamped))
 	return clamped
+
+
+func _draw_street() -> void:
+	# Calle ficticia; el detalle ausente de la fuente pertenece a la historia del juego.
+	draw_rect(Rect2(0, 0, 480, 270), Color("454943"))
+	draw_rect(Rect2(25, 47, 430, 208), Color("c2ae86"))
+	_draw_path(Rect2(34, 118, 410, 30))
+	_draw_path(Rect2(119, 145, 42, 100))
+	for row in range(8):
+		for column in range(24):
+			var point := Vector2(40 + column * 17, 155 + row * 11)
+			draw_line(point, point + Vector2(10, 0), Color("ad9877"), 0.6)
+	for house in STREET_HOUSES:
+		_draw_house(house)
+	_draw_lawn(Rect2(344, 195, 95, 45))
+	_draw_shrub(Vector2(407, 210), 18, Color("f2e6ba"), 4)
+	_draw_shrub(Vector2(59, 175), 12, Color("d5649b"), 2)
+	draw_rect(Rect2(320, 179, 39, 7), Color("704b32"))
+	draw_line(Vector2(321, 177), Vector2(358, 177), Color("bc9362"), 2)
+	# Fuente baja: azulejos azules alrededor y un hueco sin dibujo al frente.
+	draw_circle(Vector2(225, 139), 21, Color(0.2, 0.18, 0.14, 0.25))
+	draw_circle(Vector2(225, 135), 20, Color("dbd0b3"))
+	draw_circle(Vector2(225, 135), 15, Color("56868c"))
+	draw_circle(Vector2(225, 135), 9, Color("7fa6a0"))
+	for tile in range(9):
+		var angle := TAU * tile / 9.0
+		var point := Vector2(225, 135) + Vector2(cos(angle), sin(angle)) * 18
+		draw_rect(Rect2(point - Vector2(2, 2), Vector2(4, 4)), Color("315b82"))
+	draw_rect(Rect2(219, 151, 12, 7), Color("aaa08a"))
+	draw_rect(Rect2(220, 152, 10, 5), Color("c7bfa9"), false, 1)
+	# Entrada de regreso al patio, marcada con el mismo portón oscuro.
+	draw_rect(Rect2(105, 246, 72, 7), Color("282c29"))
+	for slat in range(9):
+		draw_line(Vector2(108 + slat * 8, 247), Vector2(108 + slat * 8, 252), Color("656b61"), 1)
+	draw_rect(Rect2(0, 0, 480, 40), Color("25362d"))
+	draw_line(Vector2(0, 40), Vector2(480, 40), Color("77846a"), 1)
 
 
 func get_companion_rest_position(player_position: Vector2, away: Vector2, distance: float) -> Vector2:

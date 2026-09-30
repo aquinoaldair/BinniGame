@@ -102,7 +102,7 @@ func _run() -> void:
 	player.position = companion.position + Vector2(20, 0)
 	await process_frame
 	await process_frame
-	_check(story.action_button.text == "Saludar [E]", "No aparece la interacción con Gela.")
+	_check(story.action_button.visible and story.action_button.text.contains("Saludar"), "No aparece la interacción con Gela.")
 	story.action_button.pressed.emit()
 	_check(not player.can_move and not companion.following, "El encuentro no espera a cerrar el diálogo.")
 	story.next_button.pressed.emit()
@@ -122,7 +122,8 @@ func _run() -> void:
 	for frame in range(20):
 		await physics_frame
 	_check(companion.position == paused_position, "Gela se mueve durante el diálogo.")
-	story._advance_dialogue()
+	while not story.dialogue.is_empty():
+		story._advance_dialogue()
 	_check(story.stage == story.Stage.COMPLETE and companion.following, "Hablar con la abuela reinició la misión o a Gela.")
 	_check(companion.position == paused_position, "Gela reapareció en el jardín al repetir la conversación.")
 

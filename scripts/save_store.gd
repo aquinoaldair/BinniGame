@@ -1,6 +1,6 @@
 extends RefCounted
 
-const SAVE_VERSION := 1
+const SAVE_VERSION := 2
 
 var save_path := "user://partida.json"
 var used_backup := false
@@ -58,13 +58,18 @@ func _read_valid(path: String) -> Dictionary:
 	var json := JSON.new()
 	if json.parse(file.get_as_text()) != OK or not _is_valid(json.data):
 		return {}
-	return json.data
+	var data: Dictionary = json.data
+	if data["version"] == 1:
+		data["version"] = SAVE_VERSION
+		data["clue_received"] = false
+		data["street_progress"] = 0
+	return data
 
 
 func _is_valid(data: Variant) -> bool:
-	if not data is Dictionary or data.get("version") != SAVE_VERSION:
+	if not data is Dictionary or (data.get("version") != 1 and data.get("version") != SAVE_VERSION):
 		return false
-	if data.get("scene") != "patio" or not _is_number(data.get("stage")):
+	if data.get("scene") not in ["patio", "street"] or not _is_number(data.get("stage")):
 		return false
 	var stage: float = data["stage"]
 	if stage != floorf(stage) or stage < 0 or stage > 3:
@@ -76,7 +81,20 @@ func _is_valid(data: Variant) -> bool:
 		return false
 	if not gela.get("available") is bool or not gela.get("following") is bool:
 		return false
-	return gela["available"] == (stage == 3) and (not gela["following"] or gela["available"])
+	if gela["available"] != (stage == 3) or (gela["following"] and not gela["available"]):
+		return false
+	if data["version"] == 1:
+		return data["scene"] == "patio"
+	if not data.get("clue_received") is bool or not _is_number(data.get("street_progress")):
+		return false
+	var progress: float = data["street_progress"]
+	if progress != floorf(progress) or progress < 0 or progress > 3:
+		return false
+	if data["clue_received"] and (stage != 3 or not gela["following"]):
+		return false
+	if (progress > 0 or data["scene"] == "street") and not data["clue_received"]:
+		return false
+	return true
 
 
 func _is_number(value: Variant) -> bool:

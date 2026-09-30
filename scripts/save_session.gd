@@ -118,10 +118,13 @@ func _new_game() -> void:
 func _continue_game() -> void:
 	if saved_game.is_empty():
 		return
+	world.set_zone(saved_game["scene"])
 	player.position = world.safe_save_position(_vector(saved_game["nisa_position"]))
 	companion.position = world.safe_save_position(_vector(saved_game["gela"]["position"]))
 	story.stage = int(saved_game["stage"])
 	story.pending_stage = story.stage
+	story.clue_received = saved_game["clue_received"]
+	story.street_progress = int(saved_game["street_progress"])
 	if saved_game["gela"]["available"]:
 		companion.appear()
 	if saved_game["gela"]["following"]:
@@ -146,8 +149,10 @@ func _capture_state() -> Dictionary:
 	# Durante un diálogo, stage sigue siendo el último objetivo completado.
 	return {
 		"version": SaveStore.SAVE_VERSION,
-		"scene": "patio",
+		"scene": world.zone,
 		"stage": story.stage,
+		"clue_received": story.clue_received,
+		"street_progress": story.street_progress,
 		"nisa_position": [player.position.x, player.position.y],
 		"gela": {
 			"available": companion.available,

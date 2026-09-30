@@ -3,6 +3,7 @@ extends Control
 const BUTTON_RADIUS := 13.0
 const PAD_CENTER := Vector2(61, 215)
 
+var modern := false
 var fingers: Dictionary = {}
 var active_actions: Dictionary = {}
 
@@ -13,17 +14,13 @@ func _ready() -> void:
 
 
 func _draw() -> void:
-	var directions := {
-		"move_left": PAD_CENTER + Vector2(-29, 0),
-		"move_right": PAD_CENTER + Vector2(29, 0),
-		"move_up": PAD_CENTER + Vector2(0, -29),
-		"move_down": PAD_CENTER + Vector2(0, 29),
-	}
+	var directions := _centers()
+	var radius := 10.0 if modern else BUTTON_RADIUS
 	for action in directions:
 		var center: Vector2 = directions[action]
 		var pressed := active_actions.has(action)
-		draw_circle(center, BUTTON_RADIUS, Color(0.08, 0.12, 0.10, 0.78 if pressed else 0.55))
-		draw_arc(center, BUTTON_RADIUS, 0.0, TAU, 24, Color("e8d7a5", 0.72), 1.0)
+		draw_circle(center, radius, Color(0.08, 0.12, 0.10, (0.48 if pressed else 0.24) if modern else (0.78 if pressed else 0.55)))
+		draw_arc(center, radius, 0.0, TAU, 24, Color("e8d7a5", 0.5 if modern else 0.72), 1.0)
 		var arrow := "•"
 		match action:
 			"move_left": arrow = "◀"
@@ -46,14 +43,9 @@ func _gui_input(event: InputEvent) -> void:
 
 
 func _action_at(point: Vector2) -> String:
-	var centers := {
-		"move_left": PAD_CENTER + Vector2(-29, 0),
-		"move_right": PAD_CENTER + Vector2(29, 0),
-		"move_up": PAD_CENTER + Vector2(0, -29),
-		"move_down": PAD_CENTER + Vector2(0, 29),
-	}
+	var centers := _centers()
 	for action in centers:
-		if point.distance_to(centers[action]) <= BUTTON_RADIUS + 5.0:
+		if point.distance_to(centers[action]) <= (15.0 if modern else BUTTON_RADIUS + 5.0):
 			return action
 	return ""
 
@@ -93,3 +85,20 @@ func _release_action(action: String) -> void:
 		Input.action_release(action)
 	else:
 		active_actions[action] = count
+
+
+func _centers() -> Dictionary:
+	var center := Vector2(47, 223) if modern else PAD_CENTER
+	var spread := 22.0 if modern else 29.0
+	return {
+		"move_left": center + Vector2(-spread, 0),
+		"move_right": center + Vector2(spread, 0),
+		"move_up": center + Vector2(0, -spread),
+		"move_down": center + Vector2(0, spread),
+	}
+
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_APPLICATION_FOCUS_OUT or what == NOTIFICATION_EXIT_TREE:
+		for finger_id in fingers.keys():
+			_release_finger(finger_id)

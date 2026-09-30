@@ -6,6 +6,24 @@ const ROOM_BOUNDS := Rect2(Vector2(34, 59), Vector2(411, 186))
 var facing := Vector2.DOWN
 var walk_phase := 0.0
 var can_move := true
+var human_art: Node2D # Conserva la referencia usada por la presentación del patio.
+const NisaArt = preload("res://scripts/presentation/nisa_art.gd")
+
+
+func _ready() -> void:
+	human_art = NisaArt.new()
+	human_art.name = "HumanArt"
+	human_art.protagonist = true
+	human_art.actor = self
+	add_child(human_art)
+	sync_presentation()
+
+
+func sync_presentation() -> void:
+	if human_art != null:
+		human_art.modern_enabled = true
+		human_art.visible = human_art.modern_enabled
+	queue_redraw()
 
 
 func _physics_process(delta: float) -> void:
@@ -26,6 +44,8 @@ func _physics_process(delta: float) -> void:
 
 
 func _draw() -> void:
+	if human_art != null and human_art.modern_enabled:
+		return
 	var skin := Color("ae7453")
 	var step := 0.0
 	if velocity.length_squared() > 1.0:

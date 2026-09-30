@@ -17,16 +17,19 @@ This repository contains **BINNI: El corazón del viento**, a Godot 4.7 prototyp
 - `project.godot`: engine configuration, main scene, display settings, and input actions.
 - `scenes/main.tscn`: courtyard scene that instances the player.
 - `scenes/player.tscn`: player body and collision shape.
-- `scripts/player.gd`: movement, room bounds, and procedural character drawing.
+- `scripts/player.gd`: movement, room bounds, and the visual attachment; preserve `_physics_process` for artistic changes.
+- `scripts/presentation/nisa_art.gd` and `assets/characters/nisa/`: illustrated atlas, SpriteFrames, and a presentation-only selector. Nisa keeps the same design in both zones.
 - `scripts/world.gd`: courtyard drawing and HUD creation.
 - `scripts/touch_controls.gd`: touch input and directional controls.
+- `scripts/presentation/`: courtyard art, character poses, Y-sorting, camera, lighting, and contextual UI; see `docs/patio_visual.md`. Street art remains in the existing scripts.
 - `scenes/gela.tscn` and `scripts/gela.gd`: companion drawing, collision, and following; `world.gd` provides courtyard paths.
 - `scripts/patio_story.gd`: conversations, companion encounter, and notebook objective.
 - `tests/test_companion.gd`: headless integration checks.
 - `scripts/save_session.gd`: start menu and autosave; `scripts/save_store.gd`: validated JSON storage and backup recovery.
 - `tests/test_save.gd`: save and menu integration checks with isolated files.
+- `tests/test_street.gd`: courtyard/street transitions, story progression, and save migration. Both locations share `scenes/main.tscn`; `world.gd` selects drawings, collisions, and paths by zone.
 
-Artwork currently uses drawing functions; there is no dedicated asset directory. Treat `.godot/` as generated editor data, not source.
+Scenery and Bixhozegola use drawing functions. Nisa uses an illustrated PNG atlas with eight directional animations; see `docs/nisa_design.md`. Treat `.godot/` as generated editor data, not source.
 
 ## Build, Test, and Development Commands
 
@@ -49,6 +52,12 @@ Use `res://` resource paths and existing `move_left`, `move_right`, `move_up`, a
 Run `godot --headless --path . --script res://tests/test_companion.gd` for companion and story integration checks. No external testing framework or coverage threshold exists. Manually verify WASD, arrow keys, diagonal movement, stopping animation, and courtyard bounds. For touch changes, check pressing, dragging, releasing, and multiple fingers on a touch-capable device. Check HUD readability at the 480×270 viewport and inspect debugger errors.
 
 Run `godot --headless --path . --script res://tests/test_save.gd` for persistence changes. Keep test saves separate from `user://partida.json`. Preserve the versioned format and the rule that Gela appears only after notebook delivery. New objectives must save only committed progress so interrupted dialogues can be replayed.
+
+Run `godot --headless --path . --script res://tests/test_street.gd` for zone or story changes. Save version 2 migrates version 1 without losing the notebook or Gela. The gate requires notebook delivery and Gela's greeting. If the drawing clue is still missing, read it at the gate and exit when that dialogue closes; another conversation with the grandmother is optional.
+
+Run `godot --headless --path . --script res://tests/test_presentation.gd` for presentation changes. Keep visual scale separate from collision bodies, preserve dialogue/state logic in `patio_story.gd`, and verify camera bounds, occlusion, contextual prompts, and the street fallback. Validate touch and performance on a real mobile device.
+
+Run `godot --headless --path . --script res://tests/test_nisa_art.gd` for Nisa artwork changes. Keep the actor scale at one and collision radius at 6.5; align atlas frames at their feet and keep the satchel on the same anatomical side. Cultural motifs remain provisional.
 
 ## Commit & Pull Request Guidelines
 

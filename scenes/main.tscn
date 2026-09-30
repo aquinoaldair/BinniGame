@@ -1,18 +1,18 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene format=3 uid="uid://bpf4x5ma52pay"]
 
-[ext_resource type="Script" path="res://scripts/world.gd" id="1_world"]
+[ext_resource type="Script" uid="uid://chiq60tarhic6" path="res://scripts/world.gd" id="1_world"]
 [ext_resource type="PackedScene" path="res://scenes/player.tscn" id="2_player"]
-[ext_resource type="Script" path="res://scripts/patio_story.gd" id="3_story"]
+[ext_resource type="Script" uid="uid://bgeuq3rrwvgam" path="res://scripts/patio_story.gd" id="3_story"]
 [ext_resource type="PackedScene" path="res://scenes/gela.tscn" id="4_iguana"]
 
-[node name="Patio" type="Node2D"]
+[node name="Patio" type="Node2D" unique_id=532959703]
 script = ExtResource("1_world")
 
-[node name="Nisa" parent="." instance=ExtResource("2_player")]
+[node name="Nisa" parent="." unique_id=2076757578 instance=ExtResource("2_player")]
 position = Vector2(246, 182)
 
-[node name="Gela" parent="." instance=ExtResource("4_iguana")]
+[node name="Gela" parent="." unique_id=971785420 instance=ExtResource("4_iguana")]
 position = Vector2(155, 159)
 
-[node name="PatioStory" type="Node2D" parent="."]
+[node name="PatioStory" type="Node2D" parent="." unique_id=1769118124]
 script = ExtResource("3_story")

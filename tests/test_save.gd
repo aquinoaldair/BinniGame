@@ -2,7 +2,7 @@ extends SceneTree
 
 const SaveStore = preload("res://scripts/save_store.gd")
 var failures := 0
-var test_path := "user://test_saves/%s/partida.json" % OS.get_process_id()
+var test_path := "user://test_saves/%s_%s/partida.json" % [OS.get_process_id(), Time.get_unix_time_from_system()]
 
 
 func _initialize() -> void:
