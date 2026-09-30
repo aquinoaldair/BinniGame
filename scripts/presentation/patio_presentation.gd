@@ -2,7 +2,7 @@ extends Node2D
 
 const Prop = preload("res://scripts/presentation/patio_prop.gd")
 const Ground = preload("res://scripts/presentation/patio_ground.gd")
-const HumanArt = preload("res://scripts/presentation/human_art.gd")
+const BixhozegolaArt = preload("res://scripts/presentation/bixhozegola_art.gd")
 const Lighting = preload("res://scripts/presentation/patio_lighting.gd")
 var world: Node2D
 var book: Node2D
@@ -40,14 +40,11 @@ func _ready() -> void:
 	_prop("tree", Vector2(415, 242), Vector2(17, 26), 4)
 	_prop("plant", Vector2(269, 176), Vector2(9, 13), 3)
 	_prop("plant", Vector2(101, 244), Vector2(9, 13), 8)
-	var family := Node2D.new()
+	var family := BixhozegolaArt.new()
+	family.world = world
 	family.name = "BixhozegolaVisual"
 	family.position = world.get_node("PatioStory").FAMILY_POSITION
 	add_child(family)
-	var human := HumanArt.new()
-	human.actor = family
-	human.observer = world.get_node("Nisa")
-	family.add_child(human)
 	book = _prop("book", world.get_node("PatioStory").OBJECT_POSITION, Vector2.ZERO, 0)
 	var lighting := Lighting.new()
 	lighting.name = "PatioLighting"

@@ -36,7 +36,7 @@ Si el archivo principal está dañado, Continuar intenta recuperar el respaldo. 
 
 Este relato es ficción provisional en español; no incluye traducciones ni representa una costumbre regional verificada.
 
-El patio sin nombre tiene dos casas con techos de teja, césped, senderos, jardineras y losetas rojizas. El portón conecta con una pequeña calle con casas, una fuente y una vecina. Las casas y la fuente bloquean el paso. Nisa usa sprites ilustrados; los demás personajes y los escenarios usan formas dibujadas con código como arte provisional. El saludo y el seguimiento de la iguana son comportamientos ficticios del juego.
+El patio sin nombre tiene dos casas con techos de teja, césped, senderos, jardineras y losetas rojizas. El portón conecta con una pequeña calle con casas, una fuente y una vecina. Las casas y la fuente bloquean el paso. Nisa y Bixhozegola usan sprites ilustrados; los demás personajes y los escenarios usan formas dibujadas con código como arte provisional. El saludo y el seguimiento de la iguana son comportamientos ficticios del juego.
 
 ## Prueba de integración
 
@@ -57,3 +57,9 @@ Consulta [la guía de presentación](docs/patio_visual.md) para conocer los mód
 Nisa tiene una blusa clara con detalles florales pequeños, falda coral, sandalias y un morral tejido turquesa. El atlas ilustrado contiene 24 fotogramas: reposo y caminata en las cuatro direcciones. Su diseño se conserva al salir del patio. El dibujo es una propuesta artística contemporánea; los motivos requieren verificación local.
 
 Consulta [la guía de Nisa](docs/nisa_design.md) para revisar sus vistas, recursos y nombres de animación. Ejecuta `godot --headless --path . --script res://tests/test_nisa_art.gd` para comprobar las direcciones, los fotogramas, el encuadre y que las propiedades físicas se mantienen.
+
+## Diseño de Bixhozegola
+
+Bixhozegola tiene cabello canoso recogido, rostro anciano, blusa negra con flores grandes, falda larga crema y sandalias. Permanece junto al banco: su atlas incluye reposo y conversación de cuerpo completo en vista frontal 3/4. El gesto se activa durante sus intervenciones y vuelve al reposo cuando escucha a Nisa. Las caminatas y otras direcciones quedan pendientes de una necesidad narrativa.
+
+Consulta [la guía de Bixhozegola](docs/bixhozegola_design.md) para revisar recursos, encuadre y referencias culturales pendientes. Ejecuta `godot --headless --path . --script res://tests/test_bixhozegola_art.gd` para comprobar las animaciones, la alineación de los pies, los turnos de voz y el punto original de interacción.

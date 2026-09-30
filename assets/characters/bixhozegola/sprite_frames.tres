@@ -1,0 +1,45 @@
+[gd_resource type="SpriteFrames" load_steps=8 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/characters/bixhozegola/bixhozegola_atlas.png" id="1_atlas"]
+
+[sub_resource type="AtlasTexture" id="Atlas_0"]
+atlas = ExtResource("1_atlas")
+region = Rect2(301, 15, 241, 467)
+margin = Rect2(27.5, 48, 79, 77)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_1"]
+atlas = ExtResource("1_atlas")
+region = Rect2(652, 15, 239, 467)
+margin = Rect2(30.0, 48, 81, 77)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_2"]
+atlas = ExtResource("1_atlas")
+region = Rect2(1002, 15, 240, 467)
+margin = Rect2(29.5, 48, 80, 77)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_3"]
+atlas = ExtResource("1_atlas")
+region = Rect2(296, 502, 277, 476)
+margin = Rect2(22.0, 39, 43, 68)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_4"]
+atlas = ExtResource("1_atlas")
+region = Rect2(646, 502, 277, 476)
+margin = Rect2(23.0, 39, 43, 68)
+filter_clip = true
+
+[sub_resource type="AtlasTexture" id="Atlas_5"]
+atlas = ExtResource("1_atlas")
+region = Rect2(997, 502, 276, 476)
+margin = Rect2(23.0, 39, 44, 68)
+filter_clip = true
+
+[resource]
+animations = [
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_0")}, {"duration": 1.0, "texture": SubResource("Atlas_1")}, {"duration": 1.0, "texture": SubResource("Atlas_2")}], "loop": true, "name": &"idle_down", "speed": 2.0},
+{"frames": [{"duration": 1.0, "texture": SubResource("Atlas_3")}, {"duration": 1.0, "texture": SubResource("Atlas_4")}, {"duration": 1.0, "texture": SubResource("Atlas_5")}], "loop": true, "name": &"talk_down", "speed": 3.0}
+]

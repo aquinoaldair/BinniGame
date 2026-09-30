@@ -19,6 +19,7 @@ This repository contains **BINNI: El corazón del viento**, a Godot 4.7 prototyp
 - `scenes/player.tscn`: player body and collision shape.
 - `scripts/player.gd`: movement, room bounds, and the visual attachment; preserve `_physics_process` for artistic changes.
 - `scripts/presentation/nisa_art.gd` and `assets/characters/nisa/`: illustrated atlas, SpriteFrames, and a presentation-only selector. Nisa keeps the same design in both zones.
+- `scripts/presentation/bixhozegola_art.gd` and `assets/characters/bixhozegola/`: illustrated grandmother, frontal idle and speaking animations; see `docs/bixhozegola_design.md`.
 - `scripts/world.gd`: courtyard drawing and HUD creation.
 - `scripts/touch_controls.gd`: touch input and directional controls.
 - `scripts/presentation/`: courtyard art, character poses, Y-sorting, camera, lighting, and contextual UI; see `docs/patio_visual.md`. Street art remains in the existing scripts.
@@ -29,7 +30,7 @@ This repository contains **BINNI: El corazón del viento**, a Godot 4.7 prototyp
 - `tests/test_save.gd`: save and menu integration checks with isolated files.
 - `tests/test_street.gd`: courtyard/street transitions, story progression, and save migration. Both locations share `scenes/main.tscn`; `world.gd` selects drawings, collisions, and paths by zone.
 
-Scenery and Bixhozegola use drawing functions. Nisa uses an illustrated PNG atlas with eight directional animations; see `docs/nisa_design.md`. Treat `.godot/` as generated editor data, not source.
+Scenery uses drawing functions. Nisa and Bixhozegola use illustrated PNG atlases. Nisa has eight directional animations; see `docs/nisa_design.md`. Treat `.godot/` as generated editor data, not source.
 
 ## Build, Test, and Development Commands
 
@@ -58,6 +59,8 @@ Run `godot --headless --path . --script res://tests/test_street.gd` for zone or 
 Run `godot --headless --path . --script res://tests/test_presentation.gd` for presentation changes. Keep visual scale separate from collision bodies, preserve dialogue/state logic in `patio_story.gd`, and verify camera bounds, occlusion, contextual prompts, and the street fallback. Validate touch and performance on a real mobile device.
 
 Run `godot --headless --path . --script res://tests/test_nisa_art.gd` for Nisa artwork changes. Keep the actor scale at one and collision radius at 6.5; align atlas frames at their feet and keep the satchel on the same anatomical side. Cultural motifs remain provisional.
+
+Run `godot --headless --path . --script res://tests/test_bixhozegola_art.gd` for grandmother artwork changes. Preserve `FAMILY_POSITION` and existing dialogue/state logic. Her visual selector reads speaker turns; it never moves the NPC or advances dialogue. Keep feet aligned and pause her animation outside the courtyard.
 
 ## Commit & Pull Request Guidelines
 
