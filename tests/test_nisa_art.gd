@@ -34,7 +34,9 @@ func _run() -> void:
 		for animation in ["idle_" + direction, "walk_" + direction]:
 			for frame in range(frames.get_frame_count(animation)):
 				var texture := frames.get_frame_texture(animation, frame)
-				_check(texture is AtlasTexture and texture.get_size() == Vector2(320, 320), "Los fotogramas no comparten el lienzo y origen previstos.")
+				var lateral_walk: bool = animation in ["walk_left", "walk_right"]
+				var canvas := Vector2(640, 640) if lateral_walk else Vector2(320, 320)
+				_check(texture is AtlasTexture and texture.get_size() == canvas, "Los fotogramas no comparten el lienzo previsto para su atlas.")
 		player.position = Vector2(155, 165)
 		player.facing = axes[index]
 		await process_frame
@@ -45,6 +47,11 @@ func _run() -> void:
 		for frame in range(20):
 			await physics_frame
 		_check(sprite.animation == "walk_" + direction and sprite.is_playing(), "La caminata no respeta su dirección.")
+		var texture := frames.get_frame_texture(sprite.animation, sprite.frame)
+		var origin: Vector2 = texture.get_meta("foot_origin", Vector2(160, 304))
+		var reference_height: float = texture.get_meta("reference_height", art.ATLAS_REFERENCE_HEIGHT)
+		_check((sprite.position + origin * sprite.scale).is_equal_approx(Vector2.ZERO), "Cambiar de resolución desplaza los pies respecto al cuerpo.")
+		_check(is_equal_approx(reference_height * sprite.scale.y, art.PREVIOUS_HEIGHT * art.VISUAL_SCALE), "La caminata cambia el tamaño visual del personaje.")
 		_check(sprite.frame > 0, "La animación de caminata no avanza.")
 		_check(player.velocity.is_equal_approx(axes[index] * 78.0), "La animación altera la velocidad del controlador.")
 		Input.action_release(action)

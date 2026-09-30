@@ -1,138 +1,138 @@
 {
   "canvas": [
-    320,
-    544
+	320,
+	544
   ],
   "foot_origin": [
-    160,
-    512
+	160,
+	512
   ],
   "frames": [
-    {
-      "animation": "idle_down",
-      "column": 0,
-      "region": [
-        301,
-        15,
-        241,
-        467
-      ],
-      "margin": [
-        27.5,
-        48,
-        79,
-        77
-      ],
-      "foot_anchor": [
-        433.5,
-        479
-      ],
-      "painted_height": 461
-    },
-    {
-      "animation": "idle_down",
-      "column": 1,
-      "region": [
-        652,
-        15,
-        239,
-        467
-      ],
-      "margin": [
-        30.0,
-        48,
-        81,
-        77
-      ],
-      "foot_anchor": [
-        782.0,
-        479
-      ],
-      "painted_height": 461
-    },
-    {
-      "animation": "idle_down",
-      "column": 2,
-      "region": [
-        1002,
-        15,
-        240,
-        467
-      ],
-      "margin": [
-        29.5,
-        48,
-        80,
-        77
-      ],
-      "foot_anchor": [
-        1132.5,
-        479
-      ],
-      "painted_height": 461
-    },
-    {
-      "animation": "talk_down",
-      "column": 0,
-      "region": [
-        296,
-        502,
-        277,
-        476
-      ],
-      "margin": [
-        22.0,
-        39,
-        43,
-        68
-      ],
-      "foot_anchor": [
-        434.0,
-        975
-      ],
-      "painted_height": 470
-    },
-    {
-      "animation": "talk_down",
-      "column": 1,
-      "region": [
-        646,
-        502,
-        277,
-        476
-      ],
-      "margin": [
-        23.0,
-        39,
-        43,
-        68
-      ],
-      "foot_anchor": [
-        783.0,
-        975
-      ],
-      "painted_height": 470
-    },
-    {
-      "animation": "talk_down",
-      "column": 2,
-      "region": [
-        997,
-        502,
-        276,
-        476
-      ],
-      "margin": [
-        23.0,
-        39,
-        44,
-        68
-      ],
-      "foot_anchor": [
-        1134.0,
-        975
-      ],
-      "painted_height": 470
-    }
+	{
+	  "animation": "idle_down",
+	  "column": 0,
+	  "region": [
+		301,
+		15,
+		241,
+		467
+	  ],
+	  "margin": [
+		27.5,
+		48,
+		79,
+		77
+	  ],
+	  "foot_anchor": [
+		433.5,
+		479
+	  ],
+	  "painted_height": 461
+	},
+	{
+	  "animation": "idle_down",
+	  "column": 1,
+	  "region": [
+		652,
+		15,
+		239,
+		467
+	  ],
+	  "margin": [
+		30.0,
+		48,
+		81,
+		77
+	  ],
+	  "foot_anchor": [
+		782.0,
+		479
+	  ],
+	  "painted_height": 461
+	},
+	{
+	  "animation": "idle_down",
+	  "column": 2,
+	  "region": [
+		1002,
+		15,
+		240,
+		467
+	  ],
+	  "margin": [
+		29.5,
+		48,
+		80,
+		77
+	  ],
+	  "foot_anchor": [
+		1132.5,
+		479
+	  ],
+	  "painted_height": 461
+	},
+	{
+	  "animation": "talk_down",
+	  "column": 0,
+	  "region": [
+		296,
+		502,
+		277,
+		476
+	  ],
+	  "margin": [
+		22.0,
+		39,
+		43,
+		68
+	  ],
+	  "foot_anchor": [
+		434.0,
+		975
+	  ],
+	  "painted_height": 470
+	},
+	{
+	  "animation": "talk_down",
+	  "column": 1,
+	  "region": [
+		646,
+		502,
+		277,
+		476
+	  ],
+	  "margin": [
+		23.0,
+		39,
+		43,
+		68
+	  ],
+	  "foot_anchor": [
+		783.0,
+		975
+	  ],
+	  "painted_height": 470
+	},
+	{
+	  "animation": "talk_down",
+	  "column": 2,
+	  "region": [
+		997,
+		502,
+		276,
+		476
+	  ],
+	  "margin": [
+		23.0,
+		39,
+		44,
+		68
+	  ],
+	  "foot_anchor": [
+		1134.0,
+		975
+	  ],
+	  "painted_height": 470
+	}
   ]
 }

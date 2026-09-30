@@ -18,7 +18,7 @@ Primer prototipo jugable en Godot 4.7, escrito en GDScript.
 
 ## Primer encuentro
 
-Habla con Bixhozegola, busca el cuaderno al lado derecho del patio y regresa para compartir un recuerdo. Nisa se detiene durante las conversaciones. En el patio, consulta el objetivo y los controles con el botón **?** de la esquina superior derecha. La acción aparece junto a Nisa en computadora y como botón en la esquina inferior derecha en móvil.
+En una partida nueva, Nisa comienza en el patio, alineada con el centro de su casa pequeña de la parte inferior del escenario. Continuar recupera la ubicación guardada. Habla con Bixhozegola, busca el cuaderno al lado derecho del patio y regresa para compartir un recuerdo. Nisa se detiene durante las conversaciones. En el patio, consulta el objetivo y los controles con el botón **?** de la esquina superior derecha. La acción aparece junto a Nisa en computadora y como botón en la esquina inferior derecha en móvil.
 
 ## Primer paseo
 
@@ -54,7 +54,7 @@ Consulta [la guía de presentación](docs/patio_visual.md) para conocer los mód
 
 ## Diseño de Nisa
 
-Nisa tiene una blusa clara con detalles florales pequeños, falda coral, sandalias y un morral tejido turquesa. El atlas ilustrado contiene 24 fotogramas: reposo y caminata en las cuatro direcciones. Su diseño se conserva al salir del patio. El dibujo es una propuesta artística contemporánea; los motivos requieren verificación local.
+Nisa tiene una blusa clara con detalles florales pequeños, falda coral, sandalias y un morral tejido turquesa. Sus animaciones ilustradas usan 24 fotogramas: reposo y caminata en las cuatro direcciones. Las caminatas laterales tienen una lámina propia para alternar ambas piernas y sus apoyos. Su diseño se conserva al salir del patio. El dibujo es una propuesta artística contemporánea; los motivos requieren verificación local.
 
 Consulta [la guía de Nisa](docs/nisa_design.md) para revisar sus vistas, recursos y nombres de animación. Ejecuta `godot --headless --path . --script res://tests/test_nisa_art.gd` para comprobar las direcciones, los fotogramas, el encuadre y que las propiedades físicas se mantienen.
 

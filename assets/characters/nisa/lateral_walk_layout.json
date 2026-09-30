@@ -1,0 +1,189 @@
+{
+  "canvas": [
+    640,
+    640
+  ],
+  "foot_origin": [
+    320,
+    608
+  ],
+  "reference_height": 458.75,
+  "frames": [
+    {
+      "direction": "left",
+      "column": 0,
+      "phase": "contact_near",
+      "region": [
+        90,
+        18,
+        291,
+        455
+      ],
+      "margin": [
+        198.80235042735043,
+        156,
+        349,
+        185
+      ],
+      "foot_anchor": [
+        211.19764957264957,
+        470
+      ],
+      "body_height": 449
+    },
+    {
+      "direction": "left",
+      "column": 1,
+      "phase": "passing_far",
+      "region": [
+        494,
+        18,
+        240,
+        456
+      ],
+      "margin": [
+        244.80235042735046,
+        155,
+        400,
+        184
+      ],
+      "foot_anchor": [
+        569.1976495726495,
+        471
+      ],
+      "body_height": 450
+    },
+    {
+      "direction": "left",
+      "column": 2,
+      "phase": "contact_far",
+      "region": [
+        819,
+        18,
+        286,
+        455
+      ],
+      "margin": [
+        198.30235042735046,
+        156,
+        354,
+        185
+      ],
+      "foot_anchor": [
+        940.6976495726495,
+        470
+      ],
+      "body_height": 449
+    },
+    {
+      "direction": "left",
+      "column": 3,
+      "phase": "passing_near",
+      "region": [
+        1224,
+        18,
+        246,
+        455
+      ],
+      "margin": [
+        239.30235042735035,
+        156,
+        394,
+        185
+      ],
+      "foot_anchor": [
+        1304.6976495726497,
+        470
+      ],
+      "body_height": 449
+    },
+    {
+      "direction": "right",
+      "column": 0,
+      "phase": "contact_near",
+      "region": [
+        78,
+        499,
+        297,
+        469
+      ],
+      "margin": [
+        157.0,
+        142,
+        343,
+        171
+      ],
+      "foot_anchor": [
+        241.0,
+        965
+      ],
+      "body_height": 463
+    },
+    {
+      "direction": "right",
+      "column": 1,
+      "phase": "passing_far",
+      "region": [
+        450,
+        499,
+        248,
+        477
+      ],
+      "margin": [
+        158.0,
+        134,
+        392,
+        163
+      ],
+      "foot_anchor": [
+        612.0,
+        973
+      ],
+      "body_height": 471
+    },
+    {
+      "direction": "right",
+      "column": 2,
+      "phase": "contact_far",
+      "region": [
+        809,
+        499,
+        310,
+        474
+      ],
+      "margin": [
+        155.5,
+        137,
+        330,
+        166
+      ],
+      "foot_anchor": [
+        973.5,
+        970
+      ],
+      "body_height": 468
+    },
+    {
+      "direction": "right",
+      "column": 3,
+      "phase": "passing_near",
+      "region": [
+        1180,
+        499,
+        265,
+        477
+      ],
+      "margin": [
+        158.0,
+        134,
+        375,
+        163
+      ],
+      "foot_anchor": [
+        1342.0,
+        973
+      ],
+      "body_height": 471
+    }
+  ]
+}

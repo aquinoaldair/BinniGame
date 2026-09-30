@@ -9,7 +9,7 @@
 script = ExtResource("1_world")
 
 [node name="Nisa" parent="." unique_id=2076757578 instance=ExtResource("2_player")]
-position = Vector2(246, 182)
+position = Vector2(184, 208)
 
 [node name="Gela" parent="." unique_id=971785420 instance=ExtResource("4_iguana")]
 position = Vector2(155, 159)

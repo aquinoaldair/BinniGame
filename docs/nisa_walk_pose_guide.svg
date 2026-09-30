@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1536" height="1024" viewBox="0 0 1536 1024">
+<rect width="1536" height="1024" fill="#fff9ec"/>
+<path d="M170 225 L280 225 L300 345 L150 345Z" fill="#c8bda5"/>
+<polyline points="220,336 260,387 297,443" fill="none" stroke="#1769c7" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="292" cy="443" rx="29" ry="10" fill="#1769c7"/>
+<polyline points="225,340 187,395 145,457" fill="none" stroke="#df3138" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="140" cy="457" rx="29" ry="10" fill="#df3138"/>
+<text x="120" y="500" font-family="sans-serif" font-size="24" fill="#443a2d">CONTACT A</text>
+<path d="M535 225 L645 225 L665 345 L515 345Z" fill="#c8bda5"/>
+<polyline points="585,336 567,392 558,435" fill="none" stroke="#1769c7" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="553" cy="435" rx="29" ry="10" fill="#1769c7"/>
+<polyline points="590,340 590,402 590,457" fill="none" stroke="#df3138" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="585" cy="457" rx="29" ry="10" fill="#df3138"/>
+<text x="485" y="500" font-family="sans-serif" font-size="24" fill="#443a2d">PASS A</text>
+<path d="M900 225 L1010 225 L1030 345 L880 345Z" fill="#c8bda5"/>
+<polyline points="950,336 920,387 883,443" fill="none" stroke="#1769c7" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="878" cy="443" rx="29" ry="10" fill="#1769c7"/>
+<polyline points="955,340 993,395 1035,457" fill="none" stroke="#df3138" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="1030" cy="457" rx="29" ry="10" fill="#df3138"/>
+<text x="850" y="500" font-family="sans-serif" font-size="24" fill="#443a2d">CONTACT B</text>
+<path d="M1265 225 L1375 225 L1395 345 L1245 345Z" fill="#c8bda5"/>
+<polyline points="1315,336 1315,398 1315,443" fill="none" stroke="#1769c7" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="1310" cy="443" rx="29" ry="10" fill="#1769c7"/>
+<polyline points="1320,340 1297,397 1288,441" fill="none" stroke="#df3138" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="1283" cy="441" rx="29" ry="10" fill="#df3138"/>
+<text x="1215" y="500" font-family="sans-serif" font-size="24" fill="#443a2d">PASS B</text>
+<path d="M170 727 L280 727 L300 847 L150 847Z" fill="#c8bda5"/>
+<polyline points="220,838 190,889 153,945" fill="none" stroke="#1769c7" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="158" cy="945" rx="29" ry="10" fill="#1769c7"/>
+<polyline points="225,842 263,897 305,959" fill="none" stroke="#df3138" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="310" cy="959" rx="29" ry="10" fill="#df3138"/>
+<text x="120" y="1002" font-family="sans-serif" font-size="24" fill="#443a2d">CONTACT A</text>
+<path d="M535 727 L645 727 L665 847 L515 847Z" fill="#c8bda5"/>
+<polyline points="585,838 613,894 622,937" fill="none" stroke="#1769c7" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="627" cy="937" rx="29" ry="10" fill="#1769c7"/>
+<polyline points="590,842 590,904 590,959" fill="none" stroke="#df3138" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="595" cy="959" rx="29" ry="10" fill="#df3138"/>
+<text x="485" y="1002" font-family="sans-serif" font-size="24" fill="#443a2d">PASS A</text>
+<path d="M900 727 L1010 727 L1030 847 L880 847Z" fill="#c8bda5"/>
+<polyline points="950,838 990,889 1027,945" fill="none" stroke="#1769c7" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="1032" cy="945" rx="29" ry="10" fill="#1769c7"/>
+<polyline points="955,842 917,897 875,959" fill="none" stroke="#df3138" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="880" cy="959" rx="29" ry="10" fill="#df3138"/>
+<text x="850" y="1002" font-family="sans-serif" font-size="24" fill="#443a2d">CONTACT B</text>
+<path d="M1265 727 L1375 727 L1395 847 L1245 847Z" fill="#c8bda5"/>
+<polyline points="1315,838 1315,900 1315,945" fill="none" stroke="#1769c7" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="1320" cy="945" rx="29" ry="10" fill="#1769c7"/>
+<polyline points="1320,842 1343,899 1352,943" fill="none" stroke="#df3138" stroke-width="22" stroke-linecap="round" stroke-linejoin="round"/>
+<ellipse cx="1357" cy="943" rx="29" ry="10" fill="#df3138"/>
+<text x="1215" y="1002" font-family="sans-serif" font-size="24" fill="#443a2d">PASS B</text>
+</svg>

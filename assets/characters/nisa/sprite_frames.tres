@@ -1,6 +1,7 @@
-[gd_resource type="SpriteFrames" load_steps=26 format=3]
+[gd_resource type="SpriteFrames" load_steps=27 format=3]
 
 [ext_resource type="Texture2D" path="res://assets/characters/nisa/nisa_atlas.png" id="1_atlas"]
+[ext_resource type="Texture2D" path="res://assets/characters/nisa/nisa_lateral_walk_atlas.png" id="2_lateral"]
 
 [sub_resource type="AtlasTexture" id="Atlas_0"]
 atlas = ExtResource("1_atlas")
@@ -87,28 +88,36 @@ margin = Rect2(112.0, 65, 202, 78)
 filter_clip = true
 
 [sub_resource type="AtlasTexture" id="Atlas_14"]
-atlas = ExtResource("1_atlas")
-region = Rect2(589, 511, 135, 240)
-margin = Rect2(106.0, 67, 185, 80)
+atlas = ExtResource("2_lateral")
+region = Rect2(90, 18, 291, 455)
+margin = Rect2(198.80235042735043, 156, 349, 185)
 filter_clip = true
+metadata/foot_origin = Vector2(320, 608)
+metadata/reference_height = 458.75
 
 [sub_resource type="AtlasTexture" id="Atlas_15"]
-atlas = ExtResource("1_atlas")
-region = Rect2(824, 512, 145, 239)
-margin = Rect2(93.0, 68, 175, 81)
+atlas = ExtResource("2_lateral")
+region = Rect2(494, 18, 240, 456)
+margin = Rect2(244.80235042735046, 155, 400, 184)
 filter_clip = true
+metadata/foot_origin = Vector2(320, 608)
+metadata/reference_height = 458.75
 
 [sub_resource type="AtlasTexture" id="Atlas_16"]
-atlas = ExtResource("1_atlas")
-region = Rect2(1063, 511, 154, 239)
-margin = Rect2(90.0, 68, 166, 81)
+atlas = ExtResource("2_lateral")
+region = Rect2(819, 18, 286, 455)
+margin = Rect2(198.30235042735046, 156, 354, 185)
 filter_clip = true
+metadata/foot_origin = Vector2(320, 608)
+metadata/reference_height = 458.75
 
 [sub_resource type="AtlasTexture" id="Atlas_17"]
-atlas = ExtResource("1_atlas")
-region = Rect2(1328, 512, 149, 239)
-margin = Rect2(91.5, 68, 171, 81)
+atlas = ExtResource("2_lateral")
+region = Rect2(1224, 18, 246, 455)
+margin = Rect2(239.30235042735035, 156, 394, 185)
 filter_clip = true
+metadata/foot_origin = Vector2(320, 608)
+metadata/reference_height = 458.75
 
 [sub_resource type="AtlasTexture" id="Atlas_18"]
 atlas = ExtResource("1_atlas")
@@ -123,28 +132,36 @@ margin = Rect2(85.5, 66, 194, 79)
 filter_clip = true
 
 [sub_resource type="AtlasTexture" id="Atlas_20"]
-atlas = ExtResource("1_atlas")
-region = Rect2(563, 760, 151, 243)
-margin = Rect2(77.5, 64, 169, 77)
+atlas = ExtResource("2_lateral")
+region = Rect2(78, 499, 297, 469)
+margin = Rect2(157.0, 142, 343, 171)
 filter_clip = true
+metadata/foot_origin = Vector2(320, 608)
+metadata/reference_height = 458.75
 
 [sub_resource type="AtlasTexture" id="Atlas_21"]
-atlas = ExtResource("1_atlas")
-region = Rect2(795, 760, 151, 243)
-margin = Rect2(77.5, 64, 169, 77)
+atlas = ExtResource("2_lateral")
+region = Rect2(450, 499, 248, 477)
+margin = Rect2(158.0, 134, 392, 163)
 filter_clip = true
+metadata/foot_origin = Vector2(320, 608)
+metadata/reference_height = 458.75
 
 [sub_resource type="AtlasTexture" id="Atlas_22"]
-atlas = ExtResource("1_atlas")
-region = Rect2(1047, 760, 157, 243)
-margin = Rect2(72.5, 64, 163, 77)
+atlas = ExtResource("2_lateral")
+region = Rect2(809, 499, 310, 474)
+margin = Rect2(155.5, 137, 330, 166)
 filter_clip = true
+metadata/foot_origin = Vector2(320, 608)
+metadata/reference_height = 458.75
 
 [sub_resource type="AtlasTexture" id="Atlas_23"]
-atlas = ExtResource("1_atlas")
-region = Rect2(1312, 760, 151, 242)
-margin = Rect2(77.0, 65, 169, 78)
+atlas = ExtResource("2_lateral")
+region = Rect2(1180, 499, 265, 477)
+margin = Rect2(158.0, 134, 375, 163)
 filter_clip = true
+metadata/foot_origin = Vector2(320, 608)
+metadata/reference_height = 458.75
 
 [resource]
 animations = [

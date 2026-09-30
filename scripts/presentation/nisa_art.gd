@@ -23,10 +23,11 @@ func _ready() -> void:
 	sprite.centered = false
 	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
 	sprite.scale = Vector2.ONE * SPRITE_SCALE
-	# Todos los AtlasTexture tienen el mismo lienzo y origen en los pies.
+	# El atlas base usa este origen; el lateral declara su geometría en metadatos.
 	sprite.position = Vector2(-160, -304) * SPRITE_SCALE
 	add_child(sprite)
 	sprite.play("idle_down")
+	_sync_frame_geometry()
 	queue_redraw()
 
 
@@ -47,6 +48,16 @@ func _process(_delta: float) -> void:
 		animation = "idle_" + direction
 	if sprite.animation != animation or not sprite.is_playing():
 		sprite.play(animation)
+	_sync_frame_geometry()
+
+
+func _sync_frame_geometry() -> void:
+	# Cada atlas declara su resolución de origen; el tamaño en el mundo se conserva.
+	var texture := sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+	var origin: Vector2 = texture.get_meta("foot_origin", Vector2(160, 304))
+	var reference_height: float = texture.get_meta("reference_height", ATLAS_REFERENCE_HEIGHT)
+	sprite.scale = Vector2.ONE * PREVIOUS_HEIGHT * VISUAL_SCALE / reference_height
+	sprite.position = -origin * sprite.scale
 
 
 func _draw() -> void:

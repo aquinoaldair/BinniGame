@@ -58,7 +58,7 @@ Run `godot --headless --path . --script res://tests/test_street.gd` for zone or 
 
 Run `godot --headless --path . --script res://tests/test_presentation.gd` for presentation changes. Keep visual scale separate from collision bodies, preserve dialogue/state logic in `patio_story.gd`, and verify camera bounds, occlusion, contextual prompts, and the street fallback. Validate touch and performance on a real mobile device.
 
-Run `godot --headless --path . --script res://tests/test_nisa_art.gd` for Nisa artwork changes. Keep the actor scale at one and collision radius at 6.5; align atlas frames at their feet and keep the satchel on the same anatomical side. Cultural motifs remain provisional.
+Run `godot --headless --path . --script res://tests/test_nisa_art.gd` for Nisa artwork changes. Keep the actor scale at one and collision radius at 6.5; align atlas frames at their feet and keep the satchel on the same anatomical side. Lateral walks use a separate higher-resolution atlas; `foot_origin` and `reference_height` metadata preserve world size. Verify alternating leg contacts and passing poses visually; frame-count tests do not validate anatomy. Cultural motifs remain provisional.
 
 Run `godot --headless --path . --script res://tests/test_bixhozegola_art.gd` for grandmother artwork changes. Preserve `FAMILY_POSITION` and existing dialogue/state logic. Her visual selector reads speaker turns; it never moves the NPC or advances dialogue. Keep feet aligned and pause her animation outside the courtyard.
 

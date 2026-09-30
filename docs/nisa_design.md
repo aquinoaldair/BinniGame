@@ -12,7 +12,7 @@ Antes de este cambio, Nisa se dibujaba por código: no había `AnimatedSprite2D`
 
 El cuerpo `CharacterBody2D`, su escala **1**, la colisión circular de radio **6.5**, la velocidad **78**, los límites, el movimiento, las interacciones y los diálogos conservan su funcionamiento. La función `_physics_process` y `scenes/player.tscn` se verificaron idénticas a las anteriores al rediseño. Nisa mantiene la misma identidad al pasar entre patio y calle.
 
-El atlas RGBA mide **1536×1024**. Cada `AtlasTexture` aporta un lienzo virtual **320×320**, alineado con los pies en **(160, 304)**. Las regiones y márgenes compensan las diferencias de posición del dibujo original sin recortar ni retocar el PNG. El render usa escala **0.33**, filtro lineal y una altura aproximada de **74–80 unidades**, frente a unas 51 del dibujo anterior. La sombra es independiente del sprite. El patio incluye un pequeño margen superior de cámara para evitar cortar el cabello junto al portón.
+Los atlases RGBA miden **1536×1024**. El original conserva el reposo en las cuatro direcciones y las caminatas verticales; un segundo atlas corrige únicamente las caminatas laterales. El atlas original usa un lienzo virtual **320×320**, con los pies en **(160, 304)**; el lateral usa **640×640**, con los pies en **(320, 608)**. Los metadatos de `AtlasTexture` indican origen y altura de referencia para que ambas resoluciones conserven una altura aproximada de **74–80 unidades** en el mundo. Las regiones y márgenes compensan las posiciones sin recortar ni retocar los PNG. Se usa filtro lineal y sombra independiente. El patio incluye un pequeño margen superior de cámara para evitar cortar el cabello junto al portón.
 
 ## Animaciones listas
 
@@ -23,13 +23,23 @@ El atlas RGBA mide **1536×1024**. Cada `AtlasTexture` aporta un lienzo virtual 
 
 Las vistas izquierda y derecha tienen fotogramas propios: no se reflejan con `flip_h`, para conservar la posición del morral. Al detenerse, Nisa mantiene la última orientación. Durante los diálogos permanece en reposo; el selector admite futuras animaciones `talk_*` cuando se incorporen al recurso.
 
+## Caminata lateral
+
+La corrección sustituye los cuatro dibujos de cada caminata lateral por un ciclo completo: contacto con la pierna cercana adelantada, paso de la pierna lejana, contacto con la pierna lejana adelantada y paso de la pierna cercana. La secuencia original repetía variaciones de una misma zancada. Se conservan los nombres, los cuatro fotogramas por ciclo y los 7 FPS, sin cambios en el controlador.
+
+![Cuatro fases de las caminatas laterales renderizadas en Godot](nisa_lateral_walk.png)
+
+`lateral_walk_layout.json` registra las ocho regiones que reemplazan a las caminatas izquierda y derecha del atlas original. La lámina lateral tiene cuatro columnas y dos filas, con una dirección por fila. El anclaje horizontal mantiene la cabeza respecto al reposo para evitar saltos al empezar a caminar; el vertical se alinea al apoyo de las sandalias. El selector adapta solamente la geometría visual cuando cambia de atlas.
+
 ## Recursos editables
 
 - [`nisa_atlas.png`](../assets/characters/nisa/nisa_atlas.png): imagen fuente transparente seleccionada.
+- [`nisa_lateral_walk_atlas.png`](../assets/characters/nisa/nisa_lateral_walk_atlas.png): corrección de las caminatas izquierda y derecha, manteniendo el diseño y el morral en su lado anatómico.
 - [`sprite_frames.tres`](../assets/characters/nisa/sprite_frames.tres): ocho animaciones, regiones y márgenes, editables como `SpriteFrames` en Godot.
-- [`atlas_layout.json`](../assets/characters/nisa/atlas_layout.json): registro de posiciones y orígenes de los 24 fotogramas.
+- [`atlas_layout.json`](../assets/characters/nisa/atlas_layout.json): registro del atlas original; [`lateral_walk_layout.json`](../assets/characters/nisa/lateral_walk_layout.json) reemplaza sus ocho entradas de caminata lateral en el recurso actual.
 - [`nisa_art.gd`](../scripts/presentation/nisa_art.gd): selector y sombra; conserva el controlador del jugador.
 - [`generation_prompt.md`](../assets/characters/nisa/generation_prompt.md): solicitudes exactas de generación y corrección con la herramienta integrada `image_gen`.
+- [`lateral_walk_prompt.md`](../assets/characters/nisa/lateral_walk_prompt.md): prompts de la corrección de las piernas, las sandalias y las poses de paso.
 
 Posteriormente pueden añadirse `run_*`, `talk_*`, `pick_up_*`, `sit_*`, `surprise_*`, `joy_*`, `sad_*` y `fear_*`, usando las mismas cuatro direcciones y el mismo origen. Estos nombres son una convención propuesta, no animaciones ya creadas. Las nuevas acciones deben conectarse a la capa visual cuando se desarrollen sus comportamientos correspondientes.
 
