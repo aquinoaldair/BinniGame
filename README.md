@@ -14,7 +14,7 @@ Primer prototipo jugable en Godot 4.7, escrito en GDScript.
 - Computadora: WASD o flechas del teclado.
 - Pantalla táctil: flechas semitransparentes en la esquina inferior izquierda.
 - Interacción: acércate a Bixhozegola junto al banco y presiona **E** o toca **Hablar**. Usa **E** o el botón del diálogo para avanzar y cerrar.
-- Compañera: Gela aparece en el jardín izquierdo después de entregar el cuaderno a Bixhozegola y cerrar la conversación. Acércate y presiona **E** o toca **Saludar**. Al cerrar el encuentro, te sigue rodeando las casas y descansa cerca de Nisa. Ambas se detienen durante los diálogos.
+- Compañera: Gela aparece en el suelo, debajo del árbol superior del jardín izquierdo, después de entregar el cuaderno a Bixhozegola y cerrar la conversación. Acércate y presiona **E** o toca **Saludar**. Al cerrar el encuentro, te sigue rodeando las casas y descansa cerca de Nisa. Ambas se detienen durante los diálogos.
 
 ## Primer encuentro
 
@@ -36,7 +36,7 @@ Si el archivo principal está dañado, Continuar intenta recuperar el respaldo. 
 
 Este relato es ficción provisional en español; no incluye traducciones ni representa una costumbre regional verificada.
 
-El patio sin nombre tiene dos casas con techos de teja, césped, senderos, jardineras y losetas rojizas. El portón conecta con una pequeña calle con casas, una fuente y una vecina. Las casas y la fuente bloquean el paso. Nisa y Bixhozegola usan sprites ilustrados; los demás personajes y los escenarios usan formas dibujadas con código como arte provisional. El saludo y el seguimiento de la iguana son comportamientos ficticios del juego.
+El patio sin nombre tiene dos casas con techos de teja, césped, senderos, jardineras y losetas rojizas. El portón conecta con una pequeña calle con casas, una fuente y una vecina. Las casas y la fuente bloquean el paso. Nisa, Bixhozegola y Gela usan sprites ilustrados; la vecina y los escenarios usan formas dibujadas con código como arte provisional. El saludo y el seguimiento de la iguana son comportamientos ficticios del juego.
 
 ## Prueba de integración
 
@@ -63,3 +63,9 @@ Consulta [la guía de Nisa](docs/nisa_design.md) para revisar sus vistas, recurs
 Bixhozegola tiene cabello canoso recogido, rostro anciano, blusa negra con flores grandes, falda larga crema y sandalias. Permanece junto al banco: su atlas incluye reposo y conversación de cuerpo completo en vista frontal 3/4. El gesto se activa durante sus intervenciones y vuelve al reposo cuando escucha a Nisa. Las caminatas y otras direcciones quedan pendientes de una necesidad narrativa.
 
 Consulta [la guía de Bixhozegola](docs/bixhozegola_design.md) para revisar recursos, encuadre y referencias culturales pendientes. Ejecuta `godot --headless --path . --script res://tests/test_bixhozegola_art.gd` para comprobar las animaciones, la alineación de los pies, los turnos de voz y el punto original de interacción.
+
+## Diseño de Gela
+
+Gela usa un atlas ilustrado con cuerpo verde, vientre claro, cresta discreta y cola larga con bandas. Tiene ocho animaciones: tres poses de reposo y seis de caminata por dirección. Su tamaño y origen visual se ajustan en una capa separada del seguimiento y las colisiones, y conserva el diseño en la calle.
+
+Consulta [la guía de Gela](docs/gela_design.md) y ejecuta `godot --headless --path . --script res://tests/test_gela_art.gd`. Las partidas donde todavía no apareció usan el nuevo encuentro debajo del árbol; las que ya la descubrieron recuperan su ubicación guardada.

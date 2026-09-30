@@ -47,6 +47,8 @@ func _run() -> void:
 	_check(store.load_game().get("stage") == 1, "No se autoguardó el objetivo del cuaderno.")
 	player.position = story.OBJECT_POSITION
 	story._interact()
+	# Partidas anteriores guardaban el punto oculto del encuentro en otro lugar.
+	scene.get_node("Gela").position = Vector2(155, 159)
 	session._save_now()
 	_check(store.load_game().get("stage") == 1, "El guardado en medio del diálogo adelantó el objetivo.")
 	await _close_scene(scene)
@@ -60,6 +62,7 @@ func _run() -> void:
 	var companion = scene.get_node("Gela")
 	_check(story.stage == story.Stage.SEARCH and story.dialogue.is_empty() and player.can_move, "No se restauró el último objetivo completo.")
 	_check(player.position == story.OBJECT_POSITION and not companion.available, "No se restauró la posición o Gela apareció antes de tiempo.")
+	_check(companion.position == Vector2(66, 151), "La partida antigua conserva el punto oculto anterior en vez del encuentro debajo del árbol.")
 	story._interact()
 	story._advance_dialogue()
 	_check(store.load_game().get("stage") == 2, "Recoger el cuaderno no se guardó.")
@@ -86,6 +89,7 @@ func _run() -> void:
 	session = scene.get_node("SaveSession")
 	session.continue_button.pressed.emit()
 	_check(scene.get_node("Gela").following and scene.get_node("Gela").visible, "Continuar no restaura a Gela como compañera.")
+	_check(scene.get_node("Gela").position == Vector2(145, 130), "La nueva ubicación del encuentro desplaza a una Gela ya descubierta.")
 	_check(scene.get_node("Nisa").position == Vector2(112, 126), "Continuar perdió la posición de Nisa.")
 	await _close_scene(scene)
 

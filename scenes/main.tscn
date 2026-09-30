@@ -12,7 +12,7 @@ script = ExtResource("1_world")
 position = Vector2(184, 208)
 
 [node name="Gela" parent="." unique_id=971785420 instance=ExtResource("4_iguana")]
-position = Vector2(155, 159)
+position = Vector2(66, 151)
 
 [node name="PatioStory" type="Node2D" parent="." unique_id=1769118124]
 script = ExtResource("3_story")

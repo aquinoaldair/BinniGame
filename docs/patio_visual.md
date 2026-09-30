@@ -17,6 +17,7 @@ Activa `preview_touch_controls` en el nodo raíz para mostrar las flechas en com
 - `patio_presentation.gd` organiza casas, banco, vegetación, cuaderno y Bixhozegola con sus orígenes en el suelo. El orden por Y se comparte con Nisa y Gela. El suelo usa `z_index = -10`.
 - `patio_prop.gd` dibuja fachadas, puertas, ventanas, columnas y objetos. Árboles, telas y algunas plantas se animan a un máximo de 24 actualizaciones visuales por segundo. Sus adornos no añaden obstáculos nuevos.
 - `bixhozegola_art.gd` presenta a la abuela con atlas ilustrado y animaciones frontales de reposo y conversación, con altura aproximada de **86** unidades. Lee el turno de voz sin modificar el relato; consulta [su guía de diseño](bixhozegola_design.md). Nisa usa `nisa_art.gd` y un atlas con ocho animaciones; consulta [su guía de diseño](nisa_design.md). Los tamaños visuales no modifican los cuerpos físicos.
+- `gela_art.gd` selecciona ocho animaciones ilustradas leyendo la dirección y velocidad de la compañera. Su origen se sitúa bajo el cuerpo y su cola ocupa espacio visual sin ampliar la colisión; consulta [su guía de diseño](gela_design.md).
 - `patio_camera.gd` sigue a Nisa con suavizado y zoom **1.12**, limitado al patio, con 24 unidades de margen superior para el cabello de Nisa. La perspectiva 3/4 pertenece al dibujo, sin transformar el mapa.
 - `patio_lighting.gd` combina `CanvasModulate`, `PointLight2D` y oclusores de las casas, con filtro de sombra PCF13. `daylight` permite explorar otra intensidad ambiental; todavía no existe un ciclo horario ni se guarda ese valor.
 - `patio_ui.gd` presenta los botones y textos de `patio_story.gd`; las decisiones narrativas siguen en ese script. El menú y el guardado mantienen su comportamiento.
@@ -28,6 +29,7 @@ Ejecuta con Godot 4.7 en el PATH:
 ```sh
 godot --headless --path . --script res://tests/test_presentation.gd
 godot --headless --path . --script res://tests/test_bixhozegola_art.gd
+godot --headless --path . --script res://tests/test_gela_art.gd
 godot --headless --path . --script res://tests/test_companion.gd
 godot --headless --path . --script res://tests/test_save.gd
 godot --headless --path . --script res://tests/test_street.gd

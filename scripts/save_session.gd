@@ -120,12 +120,12 @@ func _continue_game() -> void:
 		return
 	world.set_zone(saved_game["scene"])
 	player.position = world.safe_save_position(_vector(saved_game["nisa_position"]))
-	companion.position = world.safe_save_position(_vector(saved_game["gela"]["position"]))
 	story.stage = int(saved_game["stage"])
 	story.pending_stage = story.stage
 	story.clue_received = saved_game["clue_received"]
 	story.street_progress = int(saved_game["street_progress"])
 	if saved_game["gela"]["available"]:
+		companion.position = world.safe_save_position(_vector(saved_game["gela"]["position"]))
 		companion.appear()
 	if saved_game["gela"]["following"]:
 		companion.start_following(player)

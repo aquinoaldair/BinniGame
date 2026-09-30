@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/gela.gd" id="1_iguana"]
+[ext_resource type="Script" path="res://scripts/presentation/gela_art.gd" id="2_art"]
 
 [sub_resource type="CircleShape2D" id="CircleShape_iguana"]
 radius = 4.0
@@ -14,3 +15,6 @@ script = ExtResource("1_iguana")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape_iguana")
 disabled = true
+
+[node name="GelaArt" type="Node2D" parent="."]
+script = ExtResource("2_art")

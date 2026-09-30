@@ -23,14 +23,15 @@ This repository contains **BINNI: El corazón del viento**, a Godot 4.7 prototyp
 - `scripts/world.gd`: courtyard drawing and HUD creation.
 - `scripts/touch_controls.gd`: touch input and directional controls.
 - `scripts/presentation/`: courtyard art, character poses, Y-sorting, camera, lighting, and contextual UI; see `docs/patio_visual.md`. Street art remains in the existing scripts.
-- `scenes/gela.tscn` and `scripts/gela.gd`: companion drawing, collision, and following; `world.gd` provides courtyard paths.
+- `scenes/gela.tscn` and `scripts/gela.gd`: companion collision and following; `world.gd` provides courtyard paths.
+- `scripts/presentation/gela_art.gd` and `assets/characters/gela/`: illustrated companion atlas and eight animations; see `docs/gela_design.md`.
 - `scripts/patio_story.gd`: conversations, companion encounter, and notebook objective.
 - `tests/test_companion.gd`: headless integration checks.
 - `scripts/save_session.gd`: start menu and autosave; `scripts/save_store.gd`: validated JSON storage and backup recovery.
 - `tests/test_save.gd`: save and menu integration checks with isolated files.
 - `tests/test_street.gd`: courtyard/street transitions, story progression, and save migration. Both locations share `scenes/main.tscn`; `world.gd` selects drawings, collisions, and paths by zone.
 
-Scenery uses drawing functions. Nisa and Bixhozegola use illustrated PNG atlases. Nisa has eight directional animations; see `docs/nisa_design.md`. Treat `.godot/` as generated editor data, not source.
+Scenery uses drawing functions. Nisa, Bixhozegola, and Gela use illustrated PNG atlases. Nisa has eight directional animations; see `docs/nisa_design.md`. Treat `.godot/` as generated editor data, not source.
 
 ## Build, Test, and Development Commands
 
@@ -61,6 +62,8 @@ Run `godot --headless --path . --script res://tests/test_presentation.gd` for pr
 Run `godot --headless --path . --script res://tests/test_nisa_art.gd` for Nisa artwork changes. Keep the actor scale at one and collision radius at 6.5; align atlas frames at their feet and keep the satchel on the same anatomical side. Lateral walks use a separate higher-resolution atlas; `foot_origin` and `reference_height` metadata preserve world size. Verify alternating leg contacts and passing poses visually; frame-count tests do not validate anatomy. Cultural motifs remain provisional.
 
 Run `godot --headless --path . --script res://tests/test_bixhozegola_art.gd` for grandmother artwork changes. Preserve `FAMILY_POSITION` and existing dialogue/state logic. Her visual selector reads speaker turns; it never moves the NPC or advances dialogue. Keep feet aligned and pause her animation outside the courtyard.
+
+Run `godot --headless --path . --script res://tests/test_gela_art.gd` for companion artwork changes. Keep the physical scale at one, collision radius at 4, and following logic unchanged. Align the trunk floor origin across poses; visually inspect alternating paws and tail motion. Gela appears at `(66, 151)` below the upper left garden tree only after notebook delivery. Restore saved positions only for an already available companion; hidden saves use the current encounter point.
 
 ## Commit & Pull Request Guidelines
 
