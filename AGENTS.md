@@ -23,6 +23,7 @@ This repository contains **BINNI: El corazón del viento**, a Godot 4.7 prototyp
 - `scripts/world.gd`: courtyard drawing and HUD creation.
 - `scripts/touch_controls.gd`: touch input and directional controls.
 - `scripts/presentation/`: courtyard art, character poses, Y-sorting, camera, lighting, and contextual UI; see `docs/patio_visual.md`. Street art remains in the existing scripts.
+- `assets/patio/` and `scenes/props/`: painted terrain TileSet, illustrated prop atlases, and house/prop templates. `patio_ground.gd` builds static TileMapLayer surfaces; `patio_house.gd` separates facade/openings/supports/roof; `patio_ambience.gd` limits wind, cloth and leaf transforms to 12 Hz.
 - `scenes/gela.tscn` and `scripts/gela.gd`: companion collision and following; `world.gd` provides courtyard paths.
 - `scripts/presentation/gela_art.gd` and `assets/characters/gela/`: illustrated companion atlas and eight animations; see `docs/gela_design.md`.
 - `scripts/patio_story.gd`: conversations, companion encounter, and notebook objective.
@@ -31,7 +32,7 @@ This repository contains **BINNI: El corazón del viento**, a Godot 4.7 prototyp
 - `tests/test_save.gd`: save and menu integration checks with isolated files.
 - `tests/test_street.gd`: courtyard/street transitions, story progression, and save migration. Both locations share `scenes/main.tscn`; `world.gd` selects drawings, collisions, and paths by zone.
 
-Scenery uses drawing functions. Nisa, Bixhozegola, and Gela use illustrated PNG atlases. Nisa has eight directional animations; see `docs/nisa_design.md`. Treat `.godot/` as generated editor data, not source.
+The courtyard uses painted TileMapLayer surfaces and illustrated props; the street retains drawing functions. Nisa, Bixhozegola, and Gela use illustrated PNG atlases. Nisa has eight directional animations; see `docs/nisa_design.md`. Treat `.godot/` as generated editor data, not source.
 
 ## Build, Test, and Development Commands
 
@@ -58,6 +59,8 @@ Run `godot --headless --path . --script res://tests/test_save.gd` for persistenc
 Run `godot --headless --path . --script res://tests/test_street.gd` for zone or story changes. Save version 2 migrates version 1 without losing the notebook or Gela. The gate requires notebook delivery and Gela's greeting. If the drawing clue is still missing, read it at the gate and exit when that dialogue closes; another conversation with the grandmother is optional.
 
 Run `godot --headless --path . --script res://tests/test_presentation.gd` for presentation changes. Keep visual scale separate from collision bodies, preserve dialogue/state logic in `patio_story.gd`, and verify camera bounds, occlusion, contextual prompts, and the street fallback. Validate touch and performance on a real mobile device.
+
+Run `godot --headless --path . --script res://tests/test_patio_art.gd` for terrain/prop changes. Preserve the coordinate audit in `docs/patio_audit.md`, existing building collisions, and companion paths. Terrain tiles and decorative props must not add physics/navigation obstacles. Keep tree bases at their original coordinates and leave the notebook and Gela encounter visible. Static props do not process each frame; environmental animation pauses outside the courtyard.
 
 Run `godot --headless --path . --script res://tests/test_nisa_art.gd` for Nisa artwork changes. Keep the actor scale at one and collision radius at 6.5; align atlas frames at their feet and keep the satchel on the same anatomical side. Lateral walks use a separate higher-resolution atlas; `foot_origin` and `reference_height` metadata preserve world size. Verify alternating leg contacts and passing poses visually; frame-count tests do not validate anatomy. Cultural motifs remain provisional.
 

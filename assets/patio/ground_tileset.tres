@@ -1,0 +1,98 @@
+[gd_resource type="TileSet" load_steps=6 format=3]
+
+[ext_resource type="Texture2D" path="res://assets/patio/terrain_atlas.png" id="1"]
+
+[sub_resource type="TileSetAtlasSource" id="Grass"]
+resource_name = "Grass"
+texture = ExtResource("1")
+margins = Vector2i(0, 0)
+texture_region_size = Vector2i(159, 153)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="Earth"]
+resource_name = "Earth"
+texture = ExtResource("1")
+margins = Vector2i(639, 0)
+texture_region_size = Vector2i(159, 153)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="Stone"]
+resource_name = "Stone"
+texture = ExtResource("1")
+margins = Vector2i(0, 615)
+texture_region_size = Vector2i(159, 153)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="Clay"]
+resource_name = "Clay"
+texture = ExtResource("1")
+margins = Vector2i(639, 615)
+texture_region_size = Vector2i(159, 153)
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+
+[resource]
+tile_size = Vector2i(159, 153)
+sources/0 = SubResource("Grass")
+sources/1 = SubResource("Earth")
+sources/2 = SubResource("Stone")
+sources/3 = SubResource("Clay")

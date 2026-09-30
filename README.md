@@ -36,7 +36,7 @@ Si el archivo principal está dañado, Continuar intenta recuperar el respaldo. 
 
 Este relato es ficción provisional en español; no incluye traducciones ni representa una costumbre regional verificada.
 
-El patio sin nombre tiene dos casas con techos de teja, césped, senderos, jardineras y losetas rojizas. El portón conecta con una pequeña calle con casas, una fuente y una vecina. Las casas y la fuente bloquean el paso. Nisa, Bixhozegola y Gela usan sprites ilustrados; la vecina y los escenarios usan formas dibujadas con código como arte provisional. El saludo y el seguimiento de la iguana son comportamientos ficticios del juego.
+El patio sin nombre tiene dos casas con techos de teja, césped, senderos, jardineras y losetas rojizas. El portón conecta con una pequeña calle con casas, una fuente y una vecina. Las casas y la fuente bloquean el paso. Nisa, Bixhozegola y Gela usan sprites ilustrados. El patio combina materiales pintados en TileMapLayer y props ilustrados; la calle y la vecina conservan sus dibujos por código. El saludo y el seguimiento de la iguana son comportamientos ficticios del juego.
 
 ## Prueba de integración
 
@@ -48,9 +48,11 @@ Ejecuta también `godot --headless --path . --script res://tests/test_save.gd` p
 
 ## Prueba visual del patio
 
-El patio usa una presentación 2D con fachadas en perspectiva 3/4, Nisa y Bixhozegola más grandes, cámara suave, sombras, luz cálida y vegetación animada. La calle mantiene su presentación anterior. La historia, las colisiones y las partidas guardadas conservan su funcionamiento.
+El patio usa materiales de césped, tierra, piedra y barro con variaciones y bordes suaves; tres árboles ilustrados, plantas y macetas reutilizables; y casas separadas en fachada, aberturas, columnas y techo. La banca, silla, cubeta, escoba, vasijas y tendedero aportan vida cotidiana sin bloquear caminos. Conserva la cámara suave, sombras y luz cálida. El viento, las telas, dos hojas y una mariposa tienen movimiento discreto, pausado fuera del patio. La calle mantiene su presentación anterior. La historia, las colisiones y las partidas guardadas conservan su funcionamiento.
 
 Consulta [la guía de presentación](docs/patio_visual.md) para conocer los módulos, probar controles táctiles en computadora y ajustar la luz. Ejecuta `godot --headless --path . --script res://tests/test_presentation.gd` para comprobar el aislamiento visual, la cámara, las poses, la interfaz contextual y los controles.
+
+`godot --headless --path . --script res://tests/test_patio_art.gd` verifica las capas del suelo, los props sin colisiones nuevas, las rutas, el encuadre inicial y la pausa del ambiente. La [auditoría del patio](docs/patio_audit.md) documenta las coordenadas y sistemas conservados.
 
 ## Diseño de Nisa
 
