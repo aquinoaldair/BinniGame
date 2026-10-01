@@ -69,7 +69,7 @@ func _read_valid(path: String) -> Dictionary:
 func _is_valid(data: Variant) -> bool:
 	if not data is Dictionary or (data.get("version") != 1 and data.get("version") != SAVE_VERSION):
 		return false
-	if data.get("scene") not in ["patio", "street"] or not _is_number(data.get("stage")):
+	if data.get("scene") not in ["patio", "street", "jacinto"] or not _is_number(data.get("stage")):
 		return false
 	var stage: float = data["stage"]
 	if stage != floorf(stage) or stage < 0 or stage > 3:
@@ -96,6 +96,11 @@ func _is_valid(data: Variant) -> bool:
 		return false
 	var next_clue: Variant = data.get("next_clue_received", false)
 	if not next_clue is bool or (next_clue and progress != 3):
+		return false
+	var jacinto: Variant = data.get("jacinto_progress", 0)
+	if not _is_number(jacinto) or jacinto != floorf(jacinto) or jacinto < 0 or jacinto > 4:
+		return false
+	if (jacinto > 0 or data["scene"] == "jacinto") and not next_clue:
 		return false
 	return true
 

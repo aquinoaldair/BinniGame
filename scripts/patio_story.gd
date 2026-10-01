@@ -10,6 +10,10 @@ const INTERACTION_DISTANCE := 32.0
 const GATE_POSITION := Vector2(123, 65)
 const STREET_GATE := Vector2(140, 237)
 const FOUNTAIN_POSITION := Vector2(225, 153)
+const JACINTO_POSITION := Vector2(238, 174)
+const JACINTO_EXIT := Vector2(55, 225)
+const JACINTO_ROUTE := Vector2(440, 161)
+const MANGO_POSITION := Vector2(320, 204)
 const NEIGHBOR_POSITION := Vector2(335, 156)
 
 enum Stage { MEET, SEARCH, RETURN, COMPLETE }
@@ -29,6 +33,9 @@ var street_progress := 0
 var pending_clue := false
 var pending_street_progress := -1
 var pending_exit := false
+enum JacintoProgress { SEARCH, HELP, MANGOS_DOWN, MEMORY_RECEIVED, SHARED }
+var jacinto_progress := JacintoProgress.SEARCH
+var pending_jacinto_progress := -1
 var next_clue_received := false
 var pending_next_clue := false
 var opening_intro_active := false
@@ -80,12 +87,19 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if dialogue.is_empty() and player.can_move and not is_slingshot_active():
+		if next_clue_received and get_parent().zone == "street" and player.position.x >= 443 and absf(player.position.y - JACINTO_ROUTE.y) <= 17:
+			_change_zone("jacinto")
+		elif get_parent().zone == "jacinto" and player.position.x <= 36 and absf(player.position.y - JACINTO_EXIT.y) <= 17:
+			_change_zone("street", true)
 	sync_companion_guide()
-	action_button.visible = dialogue.is_empty() and _nearby_action() != ""
+	action_button.visible = not is_slingshot_active() and dialogue.is_empty() and _nearby_action() != ""
 	action_button.text = _nearby_action() + " [E]"
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
+	if is_slingshot_active():
+		return
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_E:
 		if dialogue.is_empty():
 			_interact()
@@ -110,8 +124,25 @@ func sync_companion_guide() -> void:
 	companion.set_guide(to_gate or to_fountain, destination if to_gate or to_fountain else Vector2.ZERO)
 
 
+func is_slingshot_active() -> bool:
+	var area = get_parent().get_node_or_null("JacintoPresentation")
+	return area != null and area.minigame != null and area.minigame.active
+
+
 func _nearby_action() -> String:
+	if is_slingshot_active():
+		return ""
+	if get_parent().zone == "jacinto":
+		if player.position.distance_to(JACINTO_EXIT) <= INTERACTION_DISTANCE:
+			return "Volver al pozo"
+		if player.position.distance_to(JACINTO_POSITION) <= INTERACTION_DISTANCE:
+			return "Hablar"
+		if jacinto_progress == JacintoProgress.HELP and player.position.distance_to(MANGO_POSITION) <= INTERACTION_DISTANCE:
+			return "Usar resortera"
+		return ""
 	if get_parent().zone == "street":
+		if next_clue_received and player.position.distance_to(JACINTO_ROUTE) <= INTERACTION_DISTANCE:
+			return "Ir con don Jacinto"
 		if player.position.distance_to(STREET_GATE) <= INTERACTION_DISTANCE:
 			return "Volver"
 		if player.position.distance_to(FOUNTAIN_POSITION) <= INTERACTION_DISTANCE:
@@ -138,10 +169,16 @@ func _nearby_action() -> String:
 
 
 func _interact() -> void:
-	if not dialogue.is_empty():
+	if not dialogue.is_empty() or is_slingshot_active():
 		return
 	var action := _nearby_action()
-	if action == "Salir":
+	if action == "Ir con don Jacinto":
+		_change_zone("jacinto")
+	elif action == "Volver al pozo":
+		_change_zone("street", true)
+	elif get_parent().zone == "jacinto":
+		_interact_jacinto(action)
+	elif action == "Salir":
 		if clue_received:
 			_change_zone("street")
 		else:
@@ -201,6 +238,13 @@ func _interact() -> void:
 						"Bixhozegola: Sí... Esa es una parte. La palabra en diidxazá aún nos falta, pero ya podemos seguir el recuerdo.",
 						"Nisa: Lo anotaré para que no se pierda otra vez. Seguiremos escuchando a los demás."
 					], Stage.COMPLETE)
+				elif jacinto_progress == JacintoProgress.MEMORY_RECEIVED:
+					pending_jacinto_progress = JacintoProgress.SHARED
+					_start_dialogue([
+						"Nisa: Don Jacinto recordó a su madre contando el relato bajo el huanacaxtle. La palabra aparecía cuando alguien volvía a contar lo que había escuchado.",
+						"Bixhozegola: Anotemos ese contexto. Todavía debemos confirmar la palabra y falta otra parte del relato.",
+						"Nisa: Ya tenemos otra pista. La próxima vez seguiremos buscando juntas."
+					], Stage.COMPLETE)
 				elif street_progress == 3:
 					if not next_clue_received:
 						pending_next_clue = true
@@ -237,10 +281,52 @@ func _interact_street(action: String) -> void:
 			_start_dialogue(["Vecina: Cada persona recordaba una parte del cuento. Si recuerdo algo más, te lo contaré. Gracias por escuchar."], stage)
 
 
-func _change_zone(next_zone: String) -> void:
+func _interact_jacinto(action: String) -> void:
+	if action == "Usar resortera":
+		get_parent().get_node("JacintoPresentation").minigame.start()
+	elif action == "Hablar":
+		match jacinto_progress:
+			JacintoProgress.SEARCH:
+				pending_jacinto_progress = JacintoProgress.HELP
+				_start_dialogue([
+					"Nisa: Bixhozegola me envió. Estamos reconstruyendo un cuento del cuaderno; nos falta una palabra en diidxazá.",
+					"Don Jacinto: Me suena ese cuento... Hace tantos años que no lo escucho que la palabra no me sale.",
+					"Don Jacinto: Mira esos mangos. Antes los bajaba con la resortera, pero ya no tengo el pulso de antes.",
+					"Nisa: ¿Le ayudo a bajar unos?",
+					"Don Jacinto: Gracias. Te presto la resortera. Desde la tierra despejada puedes bajar tres; aquí nadie pasa."
+				], stage)
+			JacintoProgress.HELP:
+				_start_dialogue(["Don Jacinto: La resortera está lista. Acércate al palo de mango y prueba desde el claro. Sin prisa."], stage)
+			JacintoProgress.MANGOS_DOWN:
+				pending_jacinto_progress = JacintoProgress.MEMORY_RECEIVED
+				_start_dialogue([
+					"Don Jacinto: Gracias, Nisa. Esto me recordó las tardes de joven bajo ese huanacaxtle.",
+					"Don Jacinto: Mi madre contaba allí parte del cuento. Usaba esa palabra cuando alguien volvía a contar lo que había escuchado.",
+					"Don Jacinto: No recuerdo cómo se decía. Pero recuerdo su voz y que nosotros continuábamos el relato.",
+					"Nisa: Anotaré el contexto: [PENDIENTE_DE_VERIFICACION]. Le contaré a la abuela lo que recordó."
+				], stage)
+			_:
+				_start_dialogue(["Don Jacinto: Gracias por los mangos. Cuéntale a Bixhozegola lo que recordamos; quizá ella reconozca otra parte."], stage)
+
+
+func complete_mango_game() -> void:
+	if get_parent().zone != "jacinto" or jacinto_progress != JacintoProgress.HELP:
+		return
+	jacinto_progress = JacintoProgress.MANGOS_DOWN
+	_update_objective()
+	progress_committed.emit()
+
+
+func _change_zone(next_zone: String, from_jacinto := false) -> void:
 	get_parent().set_zone(next_zone)
 	player.position = Vector2(140, 220) if next_zone == "street" else Vector2(123, 88)
 	companion.position = Vector2(176, 225) if next_zone == "street" else Vector2(123, 124)
+	if next_zone == "jacinto":
+		player.position = Vector2(47, 220)
+		companion.position = Vector2(78, 230)
+	elif from_jacinto:
+		player.position = Vector2(432, 161)
+		companion.position = Vector2(405, 162)
 	player.velocity = Vector2.ZERO
 	companion.velocity = Vector2.ZERO
 	companion.path_timer = 0.0
@@ -292,6 +378,9 @@ func _advance_dialogue() -> void:
 	if pending_clue:
 		clue_received = true
 		pending_clue = false
+	if pending_jacinto_progress >= 0:
+		jacinto_progress = pending_jacinto_progress
+		pending_jacinto_progress = -1
 	if pending_next_clue:
 		next_clue_received = true
 		pending_next_clue = false
@@ -326,7 +415,15 @@ func _update_objective() -> void:
 			elif not clue_received:
 				objective.text = "Sigue a Gela hacia el portón."
 			elif street_progress == 3:
-				objective.text = "Busca a don Jacinto junto al árbol grande." if next_clue_received else "Habla con Bixhozegola sobre la palabra pendiente."
+				if not next_clue_received:
+					objective.text = "Habla con Bixhozegola sobre la palabra pendiente."
+				else:
+					match jacinto_progress:
+						JacintoProgress.SEARCH: objective.text = "Busca a Don Jacinto." + (" Sigue el camino a la derecha del pozo." if get_parent().zone != "jacinto" else " Está bajo el huanacaxtle.")
+						JacintoProgress.HELP: objective.text = "Ayuda a Don Jacinto a bajar los mangos."
+						JacintoProgress.MANGOS_DOWN: objective.text = "Habla con Don Jacinto después de bajar los mangos."
+						JacintoProgress.MEMORY_RECEIVED: objective.text = "Comparte con Bixhozegola el recuerdo de Don Jacinto."
+						JacintoProgress.SHARED: objective.text = "Nueva pista anotada · Palabra pendiente de verificación."
 			elif get_parent().zone == "patio":
 				objective.text = "Comparte el fragmento con la abuela." if street_progress == 2 else "Sal por el portón con Gela y busca el pozo."
 			else:
@@ -337,6 +434,8 @@ func _update_objective() -> void:
 
 
 func _draw() -> void:
+	if get_parent().zone == "jacinto":
+		return
 	if get_parent().zone == "street":
 		if not get_parent().modern_street_enabled:
 			_draw_neighbor()

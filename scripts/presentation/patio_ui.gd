@@ -41,11 +41,17 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	var modern: bool = (world.zone == "patio" and world.modern_patio_enabled) or (world.zone == "street" and world.modern_street_enabled)
+	var modern: bool = (world.zone == "patio" and world.modern_patio_enabled) or (world.zone == "street" and world.modern_street_enabled) or world.zone == "jacinto"
 	if modern != active:
 		_sync_layout()
 	if not active:
 		return
+	if story.is_slingshot_active():
+		help_panel.hide()
+		help_button.hide()
+		world.controls.hide()
+		return
+	world.controls.visible = mobile or world.preview_touch_controls
 	help_panel.visible = help_open and story.dialogue.is_empty()
 	help_button.visible = story.dialogue.is_empty()
 	if story.objective.text != last_objective:
@@ -62,7 +68,7 @@ func _process(_delta: float) -> void:
 
 
 func _sync_layout() -> void:
-	active = (world.zone == "patio" and world.modern_patio_enabled) or (world.zone == "street" and world.modern_street_enabled)
+	active = (world.zone == "patio" and world.modern_patio_enabled) or (world.zone == "street" and world.modern_street_enabled) or world.zone == "jacinto"
 	help_button.visible = active
 	help_panel.visible = active and help_open
 	story.objective.visible = not active

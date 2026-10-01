@@ -5,6 +5,7 @@ const SaveSession = preload("res://scripts/save_session.gd")
 const PatioPresentation = preload("res://scripts/presentation/patio_presentation.gd")
 const PatioCamera = preload("res://scripts/presentation/patio_camera.gd")
 const PatioUI = preload("res://scripts/presentation/patio_ui.gd")
+const JacintoPresentation = preload("res://scripts/presentation/jacinto_presentation.gd")
 const StreetPresentation = preload("res://scripts/presentation/street_presentation.gd")
 
 @export var modern_patio_enabled := true
@@ -25,6 +26,7 @@ const PATH_CELL_SIZE := 6.0
 var companion_grid := AStarGrid2D.new()
 var zone := "patio"
 const STREET_HOUSES := [Rect2(28, 52, 143, 65), Rect2(325, 52, 124, 65)]
+const JACINTO_BOUNDS := [Rect2(30, 60, 120, 58), Rect2(192, 138, 20, 16), Rect2(350, 166, 14, 12)]
 const FOUNTAIN_BOUNDS := Rect2(205, 115, 40, 40)
 var building_bodies: Array[StaticBody2D] = []
 
@@ -59,6 +61,10 @@ func _ready() -> void:
 	street.name = "StreetPresentation"
 	street.world = self
 	add_child(street)
+	var jacinto := JacintoPresentation.new()
+	jacinto.name = "JacintoPresentation"
+	jacinto.world = self
+	add_child(jacinto)
 	var camera := PatioCamera.new()
 	camera.name = "PatioCamera"
 	camera.world = self
@@ -78,6 +84,8 @@ func _ready() -> void:
 
 
 func _draw() -> void:
+	if zone == "jacinto":
+		return
 	if zone == "street":
 		if not modern_street_enabled:
 			_draw_street()
@@ -178,7 +186,7 @@ func _add_building_collision(bounds: Rect2) -> void:
 
 func set_zone(next_zone: String) -> void:
 	zone = next_zone
-	y_sort_enabled = (zone == "patio" and modern_patio_enabled) or (zone == "street" and modern_street_enabled)
+	y_sort_enabled = (zone == "patio" and modern_patio_enabled) or (zone == "street" and modern_street_enabled) or zone == "jacinto"
 	get_node("Nisa").sync_presentation()
 	_update_building_collisions()
 	_build_companion_grid()
@@ -186,12 +194,18 @@ func set_zone(next_zone: String) -> void:
 
 
 func _update_building_collisions() -> void:
+	var original := [MAIN_HOUSE, SMALL_HOUSE] + STREET_HOUSES + [FOUNTAIN_BOUNDS]
 	for index in range(building_bodies.size()):
 		var active := (index < 2) if zone == "patio" else (index >= 2)
+		var bounds: Rect2 = JACINTO_BOUNDS[index - 2] if zone == "jacinto" and index >= 2 else original[index]
+		building_bodies[index].position = bounds.get_center()
+		building_bodies[index].get_child(0).shape.size = bounds.size
 		building_bodies[index].get_child(0).set_deferred("disabled", not active)
 
 
 func _blocked_buildings() -> Array:
+	if zone == "jacinto":
+		return JACINTO_BOUNDS
 	return [MAIN_HOUSE, SMALL_HOUSE] if zone == "patio" else STREET_HOUSES + [FOUNTAIN_BOUNDS]
 
 

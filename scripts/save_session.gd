@@ -125,6 +125,7 @@ func _continue_game() -> void:
 	story.clue_received = saved_game["clue_received"]
 	story.street_progress = int(saved_game["street_progress"])
 	story.next_clue_received = saved_game.get("next_clue_received", false)
+	story.jacinto_progress = int(saved_game.get("jacinto_progress", 0))
 	if saved_game["gela"]["available"]:
 		companion.position = world.safe_save_position(_vector(saved_game["gela"]["position"]))
 		companion.appear()
@@ -157,6 +158,7 @@ func _capture_state() -> Dictionary:
 		"clue_received": story.clue_received,
 		"street_progress": story.street_progress,
 		"next_clue_received": story.next_clue_received,
+		"jacinto_progress": story.jacinto_progress,
 		"nisa_position": [player.position.x, player.position.y],
 		"gela": {
 			"available": companion.available,

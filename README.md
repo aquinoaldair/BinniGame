@@ -28,7 +28,7 @@ Después de leer el recuerdo incompleto, Nisa pregunta cómo encontrar lo que fa
 
 El cuento y su relación con el cielo son ficción original del juego. No representan una tradición o creencia zapoteca verificada. La flor azul dejó de ser la pista narrativa. Los lugares no tienen nombres definitivos y no se han inventado traducciones en diidxazá. Consulta [la guía del nuevo inicio](docs/story_opening.md).
 
-Tras recuperar ese fragmento, vuelve a hablar con Bixhozegola para recibir la [siguiente pista](docs/next_memory.md): buscar a don Jacinto. Su zona se construirá en la próxima entrega. La conversación y el objetivo ya se guardan al continuar.
+Tras recuperar ese fragmento, vuelve a hablar con Bixhozegola para recibir la [siguiente pista](docs/next_memory.md): buscar a don Jacinto. Su [zona y misión de resortera](docs/jacinto_mission.md) ya están disponibles siguiendo el sendero hasta el borde derecho del pozo. El modo resortera usa carga al mantener pulsado y disparo al soltar, con trayectoria curva, viento suave y piedras ilimitadas. La conversación y el objetivo ya se guardan al continuar.
 
 ## Guardado de partida
 

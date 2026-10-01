@@ -6,7 +6,7 @@ La calle comparte la dirección ilustrada del patio. La plazoleta irregular y el
 
 ## Recursos y organización
 
-- `street_ground.gd` reutiliza el TileSet y los materiales del patio en seis TileMapLayer estáticos, sin física ni navegación.
+- `street_ground.gd` reutiliza el TileSet y los materiales del patio en siete TileMapLayer estáticos, sin física ni navegación. El sendero de la derecha continúa hasta el borde para conectar con Jacinto.
 - `street_presentation.gd` combina las casas modulares, árboles, plantas, macetas, banca, cubeta, escoba y portón existentes. Las casas varían paredes, puertas, ventanas y dimensiones sin duplicar texturas.
 - `street_well.gd` separa brocal posterior y frontal de la estructura de madera mediante Y-sorting. Es estático y reutiliza la cubeta y las sombras del kit.
 - `vecina_art.gd` presenta una ilustración estática con los pies en la posición original. Su vestimenta y motivos son provisionales y requieren revisión cultural con personas de la región.
