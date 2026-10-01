@@ -6,7 +6,7 @@ Primera escena de referencia artística de BINNI: suelo pintado, árboles orgán
 
 ## Probar y revisar
 
-Ejecuta `scenes/main.tscn` con F5. Nisa inicia junto a su casa; entrega el cuaderno y encuentra a Gela debajo del árbol superior izquierdo. Los dibujos de los personajes, diálogos, guardado, objetivos y controles conservan su funcionamiento. Activa `preview_touch_controls` para revisar las flechas en computadora; la interacción táctil requiere eventos de pantalla táctil.
+Ejecuta `scenes/main.tscn` con F5. Nisa inicia junto a su casa, observa el cielo extraño y pregunta a la abuela; entrega el cuaderno y encuentra a Gela debajo del árbol superior izquierdo. Consulta [el inicio narrativo](story_opening.md) para recorrer el primer recuerdo. Los dibujos de los personajes y controles conservan su funcionamiento. Activa `preview_touch_controls` para revisar las flechas en computadora; la interacción táctil requiere eventos de pantalla táctil.
 
 Camina delante y detrás de los árboles y alrededor de las casas. Los troncos y props usan su base para Y-Sorting. Las copas se suavizan cuando tapan a Nisa y recuperan su opacidad al pasar delante. El tejado principal también puede suavizarse cuando su proyección cruza su silueta. La casa pequeña usa una proyección más baja para dejar libre el punto inicial `(184, 208)`. No cambia su colisión.
 
@@ -33,9 +33,9 @@ Las plantillas construyen sus hijos visuales al entrar en la escena. La composic
 
 ## Luz y ambiente
 
-Se conserva la luz cálida diurna existente: un `CanvasModulate`, un `PointLight2D` con sombras suaves y oclusores de las casas. `daylight` en `patio_lighting.gd` permite ajustar la intensidad; no hay ciclo horario ni cambios al guardado. Cámara y UI mantienen sus módulos anteriores.
+Se conserva la luz cálida diurna existente: un `CanvasModulate`, un `PointLight2D` con sombras suaves y oclusores de las casas. `daylight` en `patio_lighting.gd` permite ajustar la intensidad; no hay ciclo horario. `patio_sky.gd` compone el horizonte superior con un gradiente y una franja pálida fragmentada mediante `Line2D`, detrás de muros y tejados. Tras compartir el primer fragmento, aclara los colores y separa suavemente la franja. La cámara muestra el cielo durante la observación inicial y al notar el regreso de la brisa; luego recupera su seguimiento habitual.
 
-`patio_ambience.gd` centraliza el movimiento de tres copas, dos telas, dos hojas y una mariposa pequeña a **12 actualizaciones por segundo**. Cambia transformaciones, sin `queue_redraw()` continuo. La mariposa usa dos poses en `AnimatedSprite2D`. El ambiente se pausa fuera del patio; el suelo y los demás props permanecen estáticos. No hay emisores de partículas, shaders nuevos ni luces por objeto. Los nuevos animales podrán compartir Y-Sorting y las rutas existentes; no se incorporan gallinas ni comportamientos nuevos.
+`patio_ambience.gd` centraliza el movimiento de tres copas, dos telas, dos hojas y una mariposa pequeña a **12 actualizaciones por segundo**. Cambia transformaciones, sin `queue_redraw()` continuo. El viento está detenido hasta que `street_progress` llega a 3: copas y telas quietas, hojas ocultas. Después vuelve una brisa discreta. La mariposa usa dos poses en `AnimatedSprite2D` y mantiene su actividad durante la quietud. El ambiente se pausa fuera del patio; el suelo y los demás props permanecen estáticos. No hay emisores de partículas, shaders nuevos ni luces por objeto.
 
 ![Gela visible debajo del árbol después de la entrega](patio_encounter.png)
 
@@ -49,6 +49,7 @@ godot --headless --path . --script res://tests/test_presentation.gd
 godot --headless --path . --script res://tests/test_companion.gd
 godot --headless --path . --script res://tests/test_save.gd
 godot --headless --path . --script res://tests/test_street.gd
+godot --headless --path . --script res://tests/test_story_opening.gd
 ```
 
 Las pruebas verifican capas, variantes, ausencia de colisiones nuevas, posiciones, rutas, oclusión, punto inicial, pausa ambiental, diálogos, guardado y transiciones. Revisa además legibilidad a 480×270, cuaderno/portón, contacto delante/detrás, ayuda contextual y controles táctiles. Las capturas se renderizaron en Godot. La escena de revisión completa tiene aproximadamente 240 nodos y comparte cuatro atlas; el rendimiento y la memoria en un teléfono real todavía necesitan medición.

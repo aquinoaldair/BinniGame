@@ -74,6 +74,8 @@ func _run() -> void:
 	story._interact()
 	_close_dialogue(story)
 	_check(companion.following, "El saludo no conserva la incorporación de Gela.")
+	story.clue_received = true
+	story.sync_companion_guide()
 	for index in range(4):
 		companion.position = Vector2(110, 145)
 		player.position = companion.position + axes[index] * 70

@@ -1,6 +1,7 @@
 extends Node2D
 
 signal progress_committed
+signal encounter_rustle
 
 # Relato ficticio provisional: no incluye traducciones ni costumbres atribuidas a la región.
 const FAMILY_POSITION := Vector2(328, 156)
@@ -28,6 +29,8 @@ var street_progress := 0
 var pending_clue := false
 var pending_street_progress := -1
 var pending_exit := false
+var opening_intro_active := false
+var memory_observation_active := false
 @onready var player = get_parent().get_node("Nisa")
 @onready var companion = get_parent().get_node("Gela")
 
@@ -75,6 +78,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	sync_companion_guide()
 	action_button.visible = dialogue.is_empty() and _nearby_action() != ""
 	action_button.text = _nearby_action() + " [E]"
 
@@ -86,6 +90,22 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		else:
 			_advance_dialogue()
 		get_viewport().set_input_as_handled()
+
+
+func show_opening_if_needed() -> void:
+	if stage != Stage.MEET or not dialogue.is_empty():
+		return
+	_start_dialogue([
+		"Nisa: Qué raro se ve el cielo... Esa franja no se mueve y el viento se quedó quieto. Voy a preguntarle a la abuela."
+	], Stage.MEET)
+	opening_intro_active = true
+
+
+func sync_companion_guide() -> void:
+	var to_gate: bool = companion.following and not clue_received and get_parent().zone == "patio"
+	var to_fountain: bool = companion.following and street_progress == 0 and get_parent().zone == "street"
+	var destination := GATE_POSITION if to_gate else FOUNTAIN_POSITION + Vector2(0, 26)
+	companion.set_guide(to_gate or to_fountain, destination if to_gate or to_fountain else Vector2.ZERO)
 
 
 func _nearby_action() -> String:
@@ -126,8 +146,8 @@ func _interact() -> void:
 			pending_clue = true
 			pending_exit = true
 			_start_dialogue([
-				"Nisa: Antes de salir, revisaré el cuaderno. Aquí hay un dibujo de una fuente con una flor azul.",
-				"Nisa: Podemos buscarla en la calle y preguntar si alguien recuerda el relato de la abuela. ¡Vamos, Gela!"
+				"Gela espera junto al portón y mira a Nisa, como si quisiera mostrarle algo afuera.",
+				"Nisa: Voy contigo. Llevaré el cuaderno para comparar lo que encontremos."
 			], stage)
 	elif action == "Volver":
 		_change_zone("patio")
@@ -136,48 +156,48 @@ func _interact() -> void:
 		match stage:
 			Stage.SEARCH: reminder = "Nisa: Primero buscaré el cuaderno al lado derecho del patio."
 			Stage.RETURN: reminder = "Nisa: Tengo el cuaderno. Primero se lo entregaré a la abuela."
-			Stage.COMPLETE: reminder = "Nisa: El cuaderno ya está entregado. Me falta saludar a Gela en el jardín para que venga conmigo."
+			Stage.COMPLETE: reminder = "Nisa: Algo se movió debajo del árbol. Primero iré a ver qué fue."
 		_start_dialogue([reminder], stage)
 	elif get_parent().zone == "street":
 		_interact_street(action)
 	elif action == "Saludar":
 		pending_companion = true
 		_start_dialogue([
-			"Nisa: ¡Hola, Gela! ¿Quieres explorar el patio conmigo?",
-			"Gela se acerca a Nisa y se queda a su lado."
+			"Gela sale de entre las hojas y mira hacia el portón. Nisa: ¿Quieres que te siga?",
+			"Bixhozegola: Ve con cuidado, Nisa. Y vuelve a contarme qué encontraron."
 		], stage)
 	elif action == "Recoger":
-		_start_dialogue(["Nisa: Aquí está el cuaderno. Quizá sus páginas nos ayuden a recordar."], Stage.RETURN)
+		_start_dialogue(["Nisa: Aquí está el cuaderno. Hay una fuente dibujada y una frase sin terminar. Se lo llevaré a la abuela."], Stage.RETURN)
 	elif action == "Hablar":
 		match stage:
 			Stage.MEET:
 				_start_dialogue([
-					"Bixhozegola: Nisa, quiero contarte un relato que escuchaba de pequeña. Hoy no logro recordar una de sus palabras.",
-					"Nisa: Podemos buscarla juntas. ¿Hay algo que te ayude a recordar?",
+					"Nisa: Abuela, ¿por qué el cielo tiene esa franja tan pálida? Y el viento se quedó quieto.",
+					"Bixhozegola: De pequeña escuché un cuento sobre un cielo así. No lo recuerdo bien... Mi cuaderno podría ayudarnos.",
 					"Bixhozegola: Dejé un cuaderno al lado derecho del patio. Tráelo y leamos juntas."
 				], Stage.SEARCH)
 			Stage.SEARCH:
 				_start_dialogue(["Bixhozegola: El cuaderno está al lado derecho del patio. Te espero aquí."], Stage.SEARCH)
 			Stage.RETURN:
 				_start_dialogue([
-					"Nisa: Encontré el cuaderno. ¿Podemos leer el relato juntas?",
-					"Bixhozegola: Sí. Ahora recuerdo cómo empezaba. La palabra aún se me escapa, pero podemos seguir buscándola.",
-					"Nisa: Voy a escucharte y a guardar lo que recuerdes."
+					"Nisa: Aquí dice: «Cuando el cielo se detiene, las voces...» La frase quedó incompleta.",
+					"Bixhozegola: Falta una palabra en diidxazá y cómo sigue el cuento. Otras personas también recordaban partes.",
+					"Nisa: ¿Y cómo encontraremos lo que falta? ... ¿Oíste eso? Algo se mueve debajo del árbol."
 				], Stage.COMPLETE)
 			Stage.COMPLETE:
 				if companion.following and not clue_received:
 					pending_clue = true
 					_start_dialogue([
-						"Bixhozegola: Mira este dibujo del cuaderno: una fuente con una flor azul. Recuerdo un relato sobre ese lugar, pero una parte se me escapa.",
-						"Bixhozegola: La fuente está al salir del patio. Una vecina suele descansar cerca; quizá recuerde otra parte.",
+						"Bixhozegola: Este dibujo señala la fuente donde nos reuníamos para escuchar el cuento.",
+						"Bixhozegola: Está al salir del patio. La vecina suele descansar cerca; quizá recuerde otro fragmento.",
 						"Nisa: Iré con Gela. Cuando regrese, te contaré lo que encontremos."
 					], Stage.COMPLETE)
 				elif street_progress == 2:
 					pending_street_progress = 3
 					_start_dialogue([
-						"Nisa: La flor del dibujo no está en la fuente. La vecina recuerda que alguien la pintó, pero ha olvidado quién.",
-						"Bixhozegola: Entonces reunamos lo que cada persona recuerde. No tenemos que encontrar toda la historia de una vez.",
-						"Nisa: Lo anotaré en el cuaderno. Seguiremos buscando juntas."
+						"Nisa: La vecina recordó: «...encuentran su camino cuando alguien vuelve a escucharlas». Lo contaban juntos.",
+						"Bixhozegola: Sí... Esa es una parte. La palabra en diidxazá aún nos falta, pero ya podemos seguir el recuerdo.",
+						"Nisa: Lo anotaré para que no se pierda otra vez. Seguiremos escuchando a los demás."
 					], Stage.COMPLETE)
 				else:
 					_start_dialogue(["Bixhozegola: Gracias por escucharme, Nisa. Seguiremos recordando juntas."], Stage.COMPLETE)
@@ -187,21 +207,21 @@ func _interact_street(action: String) -> void:
 	if action == "Examinar":
 		pending_street_progress = maxi(street_progress, 1)
 		_start_dialogue([
-			"Nisa: Es la fuente del cuaderno... pero aquí no está la flor azul del dibujo.",
-			"Gela se detiene junto al azulejo vacío. Nisa compara el lugar con la página del cuaderno."
+			"Gela se detiene junto a la fuente. Nisa: ¡Es el lugar del dibujo! ¿Cómo supiste que debíamos venir aquí?",
+			"Nisa: En el margen dice: «Aquí nos reuníamos para escuchar el cuento». La vecina está cerca; voy a preguntarle."
 		], stage)
 	elif action == "Hablar":
 		if street_progress == 0:
-			_start_dialogue(["Vecina: ¿Traes un dibujo de la fuente? Mírala de cerca y luego me cuentas qué encontraste."], stage)
+			_start_dialogue(["Vecina: ¿Buscas el lugar del cuaderno? Mira la fuente de cerca y compara el dibujo. Te espero aquí."], stage)
 		elif street_progress == 1:
 			pending_street_progress = 2
 			_start_dialogue([
-				"Nisa: En este dibujo hay una flor azul. En la fuente solo queda un espacio vacío.",
-				"Vecina: Recuerdo esa flor. Alguien la pintó mientras nos contaba una historia... pero no logro recordar quién era.",
-				"Nisa: Mi abuela recuerda otra parte. Voy a contarle lo que me dijiste."
+				"Nisa: El cielo está extraño. En el cuento del cuaderno dice: «Cuando el cielo se detiene, las voces...» ¿Cómo sigue?",
+				"Vecina: «...encuentran su camino cuando alguien vuelve a escucharlas». De niñas lo contábamos entre todos, aquí.",
+				"Nisa: ¡Esa parte no estaba! Voy a compartirla con mi abuela. Todavía nos falta una palabra."
 			], stage)
 		else:
-			_start_dialogue(["Vecina: Si recuerdo algo más sobre la flor, te lo contaré. Gracias por escuchar."], stage)
+			_start_dialogue(["Vecina: Cada persona recordaba una parte del cuento. Si recuerdo algo más, te lo contaré. Gracias por escuchar."], stage)
 
 
 func _change_zone(next_zone: String) -> void:
@@ -213,12 +233,15 @@ func _change_zone(next_zone: String) -> void:
 	companion.path_timer = 0.0
 	companion.path.clear()
 	_update_objective()
+	sync_companion_guide()
 	queue_redraw()
 	progress_committed.emit()
 	get_parent().queue_redraw()
 
 
 func _start_dialogue(lines: Array[String], next_stage: Stage) -> void:
+	opening_intro_active = false
+	memory_observation_active = false
 	dialogue = lines
 	dialogue_index = 0
 	pending_stage = next_stage
@@ -230,6 +253,8 @@ func _start_dialogue(lines: Array[String], next_stage: Stage) -> void:
 
 func _show_line() -> void:
 	dialogue_text.text = dialogue[dialogue_index]
+	if stage == Stage.RETURN and pending_stage == Stage.COMPLETE and dialogue_index == 2:
+		encounter_rustle.emit()
 	next_button.text = "Cerrar [E]" if dialogue_index == dialogue.size() - 1 else "Siguiente [E]"
 
 
@@ -241,6 +266,8 @@ func _advance_dialogue() -> void:
 		_show_line()
 		return
 	dialogue.clear()
+	opening_intro_active = false
+	memory_observation_active = false
 	dialogue_panel.hide()
 	player.can_move = true
 	stage = pending_stage
@@ -252,6 +279,7 @@ func _advance_dialogue() -> void:
 	if pending_clue:
 		clue_received = true
 		pending_clue = false
+	var recovered_memory := pending_street_progress == 3 and street_progress < 3
 	if pending_street_progress >= 0:
 		street_progress = pending_street_progress
 		pending_street_progress = -1
@@ -260,29 +288,35 @@ func _advance_dialogue() -> void:
 		_change_zone("street")
 		return
 	_update_objective()
+	sync_companion_guide()
 	queue_redraw()
 	progress_committed.emit()
 	get_parent().queue_redraw()
+	if recovered_memory:
+		_start_dialogue([
+			"Nisa: La franja cambió un poco... Y volvió una brisa. Todavía falta parte del cuento, pero ya tenemos por dónde seguir."
+		], stage)
+		memory_observation_active = true
 
 
 func _update_objective() -> void:
 	match stage:
-		Stage.MEET: objective.text = "Acércate a Bixhozegola junto al banco y habla."
+		Stage.MEET: objective.text = "Pregunta a Bixhozegola por el cielo extraño."
 		Stage.SEARCH: objective.text = "Busca el cuaderno al lado derecho del patio."
 		Stage.RETURN: objective.text = "Regresa con Bixhozegola y comparte el cuaderno."
 		Stage.COMPLETE:
 			if not companion.following:
-				objective.text = "Busca a Gela en el jardín y salúdala."
+				objective.text = "Investiga el ruido debajo del árbol del jardín."
 			elif not clue_received:
-				objective.text = "Sal por el portón con Gela; revisarán el cuaderno antes de salir."
+				objective.text = "Sigue a Gela hacia el portón."
 			elif street_progress == 3:
-				objective.text = "Primer paseo completado · El cuaderno guarda una nueva pista."
+				objective.text = "Primer recuerdo recuperado · Aún falta una palabra."
 			elif get_parent().zone == "patio":
-				objective.text = "Comparte la pista con la abuela." if street_progress == 2 else "Sal por el portón con Gela y busca la fuente."
+				objective.text = "Comparte el fragmento con la abuela." if street_progress == 2 else "Sal por el portón con Gela y busca la fuente."
 			else:
 				match street_progress:
-					0: objective.text = "Examina la fuente y compárala con el dibujo."
-					1: objective.text = "Pregunta a la vecina por la flor azul."
+					0: objective.text = "Sigue a Gela y examina la fuente."
+					1: objective.text = "Pregunta a la vecina cómo sigue el cuento."
 					2: objective.text = "Vuelve por el portón y habla con la abuela."
 
 

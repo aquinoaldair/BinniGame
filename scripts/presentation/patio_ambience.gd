@@ -7,6 +7,8 @@ var clothes: Array[Sprite2D] = []
 var leaves: Array[Sprite2D] = []
 var butterfly: AnimatedSprite2D
 var clock := 0.0
+var wind_clock := 0.0
+var wind_still := true
 var accumulator := 0.0
 var updates := 0
 
@@ -15,6 +17,7 @@ func _ready() -> void:
 	for index in range(2):
 		var leaf := Assets.sprite(self, "leaf", Rect2(-1, -0.5, 2, 1))
 		leaf.modulate.a = 0.7
+		leaf.visible = not wind_still
 		leaves.append(leaf)
 	var frames := SpriteFrames.new()
 	frames.remove_animation("default")
@@ -47,14 +50,31 @@ func _process(delta: float) -> void:
 	if accumulator < 1.0 / 12.0:
 		return
 	clock += accumulator
+	if not wind_still:
+		wind_clock += accumulator
 	accumulator = 0.0
 	updates += 1
-	for index in range(trees.size()):
-		trees[index].position.x = sin(clock * 0.7 + index * 2.3) * 0.35
-	for index in range(clothes.size()):
-		clothes[index].rotation = sin(clock * 1.1 + index * 1.4) * 0.012
 	butterfly.position = Vector2(128 + sin(clock * 0.35) * 24, 170 + cos(clock * 0.46) * 9)
+	if wind_still:
+		return
+	for index in range(trees.size()):
+		trees[index].position.x = sin(wind_clock * 0.7 + index * 2.3) * 0.35
+	for index in range(clothes.size()):
+		clothes[index].rotation = sin(wind_clock * 1.1 + index * 1.4) * 0.012
 	for index in range(leaves.size()):
-		var travel := fmod(clock * 2.1 + index * 31, 76)
+		var travel := fmod(wind_clock * 2.1 + index * 31, 76)
 		leaves[index].position = Vector2(64 + index * 53 + sin(travel * 0.05) * 4, 119 + travel)
-		leaves[index].rotation = sin(clock * 0.8 + index) * 0.3
+		leaves[index].rotation = sin(wind_clock * 0.8 + index) * 0.3
+
+
+func set_wind_still(still: bool) -> void:
+	if wind_still == still:
+		return
+	wind_still = still
+	for leaf in leaves:
+		leaf.visible = not still
+	if still:
+		for tree in trees:
+			tree.position.x = 0.0
+		for cloth in clothes:
+			cloth.rotation = 0.0

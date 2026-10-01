@@ -27,6 +27,7 @@ This repository contains **BINNI: El corazón del viento**, a Godot 4.7 prototyp
 - `scenes/gela.tscn` and `scripts/gela.gd`: companion collision and following; `world.gd` provides courtyard paths.
 - `scripts/presentation/gela_art.gd` and `assets/characters/gela/`: illustrated companion atlas and eight animations; see `docs/gela_design.md`.
 - `scripts/patio_story.gd`: conversations, companion encounter, and notebook objective.
+- `scripts/presentation/patio_sky.gd`: fictional strange sky; presentation reads committed story progress to restore a little color and wind. See `docs/story_opening.md`.
 - `tests/test_companion.gd`: headless integration checks.
 - `scripts/save_session.gd`: start menu and autosave; `scripts/save_store.gd`: validated JSON storage and backup recovery.
 - `tests/test_save.gd`: save and menu integration checks with isolated files.
@@ -58,6 +59,8 @@ Run `godot --headless --path . --script res://tests/test_save.gd` for persistenc
 
 Run `godot --headless --path . --script res://tests/test_street.gd` for zone or story changes. Save version 2 migrates version 1 without losing the notebook or Gela. The gate requires notebook delivery and Gela's greeting. If the drawing clue is still missing, read it at the gate and exit when that dialogue closes; another conversation with the grandmother is optional.
 
+Run `godot --headless --path . --script res://tests/test_story_opening.gd` for narrative opening changes. Nisa asks about the strange sky; the notebook holds an incomplete fictional story. Restore a gentle breeze only after sharing the neighbor's fragment (`street_progress == 3`), never during an unfinished dialogue. Keep save version 2 and replay the brief opening only while the first conversation remains incomplete. Do not invent the missing diidxazá word or attribute the sky story to verified Zapotec beliefs.
+
 Run `godot --headless --path . --script res://tests/test_presentation.gd` for presentation changes. Keep visual scale separate from collision bodies, preserve dialogue/state logic in `patio_story.gd`, and verify camera bounds, occlusion, contextual prompts, and the street fallback. Validate touch and performance on a real mobile device.
 
 Run `godot --headless --path . --script res://tests/test_patio_art.gd` for terrain/prop changes. Preserve the coordinate audit in `docs/patio_audit.md`, existing building collisions, and companion paths. Terrain tiles and decorative props must not add physics/navigation obstacles. Keep tree bases at their original coordinates and leave the notebook and Gela encounter visible. Static props do not process each frame; environmental animation pauses outside the courtyard.
@@ -66,7 +69,9 @@ Run `godot --headless --path . --script res://tests/test_nisa_art.gd` for Nisa a
 
 Run `godot --headless --path . --script res://tests/test_bixhozegola_art.gd` for grandmother artwork changes. Preserve `FAMILY_POSITION` and existing dialogue/state logic. Her visual selector reads speaker turns; it never moves the NPC or advances dialogue. Keep feet aligned and pause her animation outside the courtyard.
 
-Run `godot --headless --path . --script res://tests/test_gela_art.gd` for companion artwork changes. Keep the physical scale at one, collision radius at 4, and following logic unchanged. Align the trunk floor origin across poses; visually inspect alternating paws and tail motion. Gela appears at `(66, 151)` below the upper left garden tree only after notebook delivery. Restore saved positions only for an already available companion; hidden saves use the current encounter point.
+Run `godot --headless --path . --script res://tests/test_gela_art.gd` for companion artwork changes. Keep the physical scale at one, collision radius at 4, and normal following logic unchanged. Align the trunk floor origin across poses; visually inspect alternating paws and tail motion. Gela appears at `(66, 151)` below the upper left garden tree only after notebook delivery. Restore saved positions only for an already available companion; hidden saves use the current encounter point.
+
+Run `godot --headless --path . --script res://tests/test_gela_intro.gd` for Gela's entrance and temporary guiding behavior. A rustle announces her during notebook reading. After the encounter she leads to the gate, then the fountain, waiting for Nisa and pausing during dialogue. Derive guiding from existing committed progress without new save fields; resume normal following after examining the fountain. `gela_encounter.gd` supplies presentation-only leaves and a short local rustle sound. Her mysterious behavior is original fiction.
 
 ## Commit & Pull Request Guidelines
 

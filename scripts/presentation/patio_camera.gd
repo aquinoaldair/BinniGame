@@ -22,7 +22,9 @@ func _process(_delta: float) -> void:
 	if active != patio_active:
 		_sync_zone()
 	if patio_active:
-		position = player.position + Vector2(0, -18)
+		var story = world.get_node("PatioStory")
+		var watching_sky: bool = story.opening_intro_active or story.memory_observation_active
+		position = Vector2(player.position.x, 96) if watching_sky else player.position + Vector2(0, -18)
 
 
 func _sync_zone() -> void:

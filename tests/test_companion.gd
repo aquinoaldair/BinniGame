@@ -109,6 +109,10 @@ func _run() -> void:
 	story.next_button.pressed.emit()
 	_check(companion.following and player.can_move, "Gela no se incorporó tras el saludo.")
 	_check(story.stage == story.Stage.COMPLETE, "El saludo cambió el progreso del cuaderno.")
+	_check(companion.guiding, "Gela no guía a Nisa hacia el portón.")
+	# A partir de la pista del cuaderno conserva el seguimiento normal del patio.
+	story.clue_received = true
+	story.sync_companion_guide()
 
 	await _follow_to(scene, Vector2(180, 85), Vector2(370, 175))
 	await _follow_to(scene, Vector2(105, 238), Vector2(285, 238))

@@ -6,12 +6,15 @@ const Ground = preload("res://scripts/presentation/patio_ground.gd")
 const BixhozegolaArt = preload("res://scripts/presentation/bixhozegola_art.gd")
 const Lighting = preload("res://scripts/presentation/patio_lighting.gd")
 const Ambience = preload("res://scripts/presentation/patio_ambience.gd")
+const PatioSky = preload("res://scripts/presentation/patio_sky.gd")
+const GelaEncounter = preload("res://scripts/presentation/gela_encounter.gd")
 var world: Node2D
 var book: Node2D
 var gate: Node2D
 var trees: Array[Node2D] = []
 var houses: Array[Node2D] = []
 var ambience: Node2D
+var sky: Node2D
 var last_gate_open := false
 var last_book_visible := false
 var occlusion_timer := 0.0
@@ -23,6 +26,10 @@ func _ready() -> void:
 	ground.name = "Ground"
 	ground.z_index = -10
 	add_child(ground)
+	sky = PatioSky.new()
+	sky.name = "Sky"
+	sky.z_index = -9
+	add_child(sky)
 	_house("MainHouse", Vector2(328, 130), false)
 	_house("SmallHouse", Vector2(184, 252), true)
 	_prop("bench", Vector2(295, 154), Vector2.ZERO, 0)
@@ -69,6 +76,11 @@ func _ready() -> void:
 		ambience.trees.append(tree.canopy)
 	ambience.clothes.assign(laundry.cloths)
 	add_child(ambience)
+	var encounter := GelaEncounter.new()
+	encounter.name = "GelaEncounter"
+	encounter.world = world
+	encounter.z_index = 2
+	add_child(encounter)
 	var lighting := Lighting.new()
 	lighting.name = "PatioLighting"
 	lighting.world = world
@@ -86,6 +98,8 @@ func _process(delta: float) -> void:
 	if not visible:
 		return
 	var story = world.get_node("PatioStory")
+	sky.set_memory_recovered(story.street_progress >= 3)
+	ambience.set_wind_still(story.street_progress < 3)
 	var show_book: bool = story.stage == story.Stage.SEARCH
 	if show_book != last_book_visible:
 		last_book_visible = show_book

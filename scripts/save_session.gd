@@ -142,6 +142,8 @@ func _begin_play() -> void:
 	for action in ["move_left", "move_right", "move_up", "move_down"]:
 		Input.action_release(action)
 	get_tree().paused = false
+	story.show_opening_if_needed()
+	story.sync_companion_guide()
 	_save_now()
 
 

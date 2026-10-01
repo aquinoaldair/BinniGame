@@ -40,6 +40,8 @@ func _run() -> void:
 	_check(store.load_game().get("stage") == 0, "No se guardó la partida inicial.")
 	var player = scene.get_node("Nisa")
 	var story = scene.get_node("PatioStory")
+	_check(story.opening_intro_active and not player.can_move, "La apertura del cielo no se presenta al comenzar.")
+	story._advance_dialogue()
 	player.position = story.FAMILY_POSITION + Vector2(0, 12)
 	story._interact()
 	for line in range(3):

@@ -17,7 +17,9 @@ Cada dirección (`down`, `up`, `left`, `right`) tiene `idle_*` con tres poses y 
 
 El origen virtual es `(256, 384)`, bajo el centro del cuerpo. La escala visual base es 0.18, con longitud de cuerpo y cabeza aproximada de 18 unidades; la cola amplía la silueta. La escala del actor permanece en uno, con colisión circular de radio 4. Se conserva el controlador de seguimiento, la distancia de descanso y la pausa durante diálogos. El dibujo procedural anterior se retiró.
 
-Gela aparece en `(66, 151)`, en el suelo debajo del árbol superior del jardín izquierdo, al cerrar la entrega del cuaderno. El saludo sigue activando el acompañamiento. Las partidas anteriores donde aún está oculta usan este punto; si ya apareció, se restaura su posición guardada. No cambia la versión del guardado.
+Gela aparece en `(66, 151)`, en el suelo debajo del árbol superior del jardín izquierdo, al cerrar la entrega del cuaderno. Un crujido anuncia su entrada durante la lectura. Al acercarse Nisa, Gela la invita a seguirla: guía hasta el portón y después hacia la fuente, esperando si Nisa se retrasa y colocándose a un lado si queda oculta durante la espera. Tras examinar la fuente retoma el seguimiento habitual. Consulta [el inicio narrativo](story_opening.md) y `tests/test_gela_intro.gd`.
+
+Las partidas anteriores donde aún está oculta usan el mismo punto de encuentro; si ya apareció, se restaura su posición guardada. La guía se recupera a partir de los objetivos existentes, sin cambiar la versión del guardado. El atlas y su selector siguen leyendo la velocidad y dirección reales, también durante la guía.
 
 ![Encuentro debajo del árbol](gela_encounter.png)
 

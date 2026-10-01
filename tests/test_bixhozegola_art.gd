@@ -41,11 +41,11 @@ func _run() -> void:
 	story._interact()
 	await process_frame
 	await process_frame
-	_check(sprite.animation == "talk_down" and family.speaking and not player.can_move, "El gesto de conversación no coincide con el turno de Bixhozegola.")
+	_check(sprite.animation == "idle_down" and not family.speaking and not player.can_move, "La abuela mueve la boca durante la pregunta inicial de Nisa.")
 	story._advance_dialogue()
 	await process_frame
 	await process_frame
-	_check(sprite.animation == "idle_down" and not family.speaking, "La abuela mueve la boca durante el turno de Nisa.")
+	_check(sprite.animation == "talk_down" and family.speaking, "El gesto de conversación no coincide con la respuesta de Bixhozegola.")
 	story._advance_dialogue()
 	await process_frame
 	await process_frame

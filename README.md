@@ -14,23 +14,25 @@ Primer prototipo jugable en Godot 4.7, escrito en GDScript.
 - Computadora: WASD o flechas del teclado.
 - Pantalla táctil: flechas semitransparentes en la esquina inferior izquierda.
 - Interacción: acércate a Bixhozegola junto al banco y presiona **E** o toca **Hablar**. Usa **E** o el botón del diálogo para avanzar y cerrar.
-- Compañera: Gela aparece en el suelo, debajo del árbol superior del jardín izquierdo, después de entregar el cuaderno a Bixhozegola y cerrar la conversación. Acércate y presiona **E** o toca **Saludar**. Al cerrar el encuentro, te sigue rodeando las casas y descansa cerca de Nisa. Ambas se detienen durante los diálogos.
+- Compañera: un crujido y unas hojas anuncian a Gela al leer el cuaderno. Aparece debajo del árbol superior del jardín izquierdo después de terminar la entrega. Acércate y presiona **E** o toca **Saludar**: Gela invita a Nisa a seguirla hacia el portón y la fuente. Espera si Nisa se retrasa y se detiene durante los diálogos. Después de examinar la fuente, sigue a Nisa y descansa cerca como antes.
 
 ## Primer encuentro
 
-En una partida nueva, Nisa comienza en el patio, alineada con el centro de su casa pequeña de la parte inferior del escenario. Continuar recupera la ubicación guardada. Habla con Bixhozegola, busca el cuaderno al lado derecho del patio y regresa para compartir un recuerdo. Nisa se detiene durante las conversaciones. En el patio, consulta el objetivo y los controles con el botón **?** de la esquina superior derecha. La acción aparece junto a Nisa en computadora y como botón en la esquina inferior derecha en móvil.
+En una partida nueva, Nisa comienza frente al centro de su casa pequeña. Observa una franja pálida e inmóvil en el cielo y nota que el viento se detuvo. La cámara muestra el cielo durante esa breve observación; al cerrar el diálogo vuelve a seguir a Nisa. Pregunta a Bixhozegola qué ocurre, busca su cuaderno al lado derecho del patio y regresa para leerlo juntas. La abuela recuerda un cuento de su infancia, pero la frase y una palabra en diidxazá están incompletas.
+
+Nisa se detiene durante las conversaciones. En el patio, consulta el objetivo y los controles con el botón **?** de la esquina superior derecha. La acción aparece junto a Nisa en computadora y como botón en la esquina inferior derecha en móvil.
 
 ## Primer paseo
 
-Después de entregar el cuaderno y saludar a Gela, acércate al portón superior izquierdo y pulsa **E** o **Salir**. Nisa revisa el dibujo de una fuente con una flor azul y sale al cerrar ese diálogo. También puedes consultar antes la pista con la abuela. En la calle, examina la fuente y habla con la vecina. Vuelve por el portón de la parte inferior para compartir la pista con la abuela y completar el paseo.
+Después de leer el recuerdo incompleto, Nisa pregunta cómo encontrar lo que falta y oye hojas bajo el árbol. Al acercarse, Gela mira hacia el portón; Nisa pregunta «¿Quieres que te siga?». La abuela le pide volver para contarle lo que encuentre. Sigue a Gela, acércate al portón y pulsa **E** o **Salir**. En la calle Gela se dirige a la fuente: Nisa reconoce el dibujo del cuaderno al examinarla. Pregunta a la vecina cómo continúa la frase y regresa con Bixhozegola. Al terminar de compartir el fragmento, el cielo se aclara ligeramente y vuelve una brisa; la palabra pendiente todavía necesita recuperarse.
 
-La calle, la vecina y el azulejo ausente son ficción provisional. Los lugares no tienen nombres definitivos y no se han inventado traducciones en diidxazá.
+El cuento y su relación con el cielo son ficción original del juego. No representan una tradición o creencia zapoteca verificada. La flor azul dejó de ser la pista narrativa. Los lugares no tienen nombres definitivos y no se han inventado traducciones en diidxazá. Consulta [la guía del nuevo inicio](docs/story_opening.md).
 
 ## Guardado de partida
 
 Al abrir el proyecto, elige **Continuar** para recuperar tu partida o **Nueva partida** para empezar desde cero. Continuar se desactiva si no hay un guardado válido. Nueva partida pide confirmación antes de reemplazar los datos existentes.
 
-La partida se guarda localmente en `user://partida.json`, con respaldo en `user://partida.json.bak`. Conserva el escenario actual, el progreso del cuaderno y del paseo, la aparición y el seguimiento de Gela y las posiciones de ambas. Hay autoguardado al cambiar de escenario, cerrar conversaciones, cada diez segundos y al perder el foco, pasar a segundo plano o cerrar la ventana. Si sales durante un diálogo, se repite desde el último objetivo completado. Las partidas de la versión anterior se actualizan conservando el progreso.
+La partida se guarda localmente en `user://partida.json`, con respaldo en `user://partida.json.bak`. Conserva el escenario actual, el progreso del cuaderno y del primer recuerdo, la aparición y el seguimiento de Gela y las posiciones de ambas. Hay autoguardado al cambiar de escenario, cerrar conversaciones, cada diez segundos y al perder el foco, pasar a segundo plano o cerrar la ventana. Si sales durante un diálogo, se repite desde el último objetivo completado. La observación inicial se repite mientras no hayas terminado la primera conversación con Bixhozegola. Las partidas anteriores conservan su progreso; un paseo ya completado corresponde al primer fragmento recuperado.
 
 Si el archivo principal está dañado, Continuar intenta recuperar el respaldo. Una partida nueva reemplaza también ese respaldo. En el editor, **Proyecto → Abrir carpeta de datos de usuario** permite localizar los archivos. Este guardado es local al dispositivo.
 
@@ -46,9 +48,13 @@ Ejecuta también `godot --headless --path . --script res://tests/test_save.gd` p
 
 `godot --headless --path . --script res://tests/test_street.gd` comprueba la pista, la salida y el regreso, las conversaciones de la calle, las colisiones y la migración del guardado anterior. Ambos escenarios comparten la escena principal; `world.gd` cambia el diseño y las colisiones según el escenario guardado.
 
+`godot --headless --path . --script res://tests/test_story_opening.gd` recorre el inicio, verifica que el cielo y la brisa cambien solo al completar el primer recuerdo y comprueba la recuperación de conversaciones interrumpidas con guardados aislados.
+
+`godot --headless --path . --script res://tests/test_gela_intro.gd` comprueba el ruido, la invitación, la guía hacia el portón y la fuente, las esperas, la separación de Nisa y la recuperación al continuar en ambas zonas.
+
 ## Prueba visual del patio
 
-El patio usa materiales de césped, tierra, piedra y barro con variaciones y bordes suaves; tres árboles ilustrados, plantas y macetas reutilizables; y casas separadas en fachada, aberturas, columnas y techo. La banca, silla, cubeta, escoba, vasijas y tendedero aportan vida cotidiana sin bloquear caminos. Conserva la cámara suave, sombras y luz cálida. El viento, las telas, dos hojas y una mariposa tienen movimiento discreto, pausado fuera del patio. La calle mantiene su presentación anterior. La historia, las colisiones y las partidas guardadas conservan su funcionamiento.
+El patio usa materiales de césped, tierra, piedra y barro con variaciones y bordes suaves; tres árboles ilustrados, plantas y macetas reutilizables; y casas separadas en fachada, aberturas, columnas y techo. La banca, silla, cubeta, escoba, vasijas y tendedero aportan vida cotidiana sin bloquear caminos. Conserva la cámara suave, sombras y luz cálida. Al inicio, las copas y telas permanecen quietas; su movimiento y dos hojas regresan después del primer recuerdo. Una mariposa pequeña sigue revoloteando. Todo el ambiente se pausa fuera del patio. La calle mantiene su presentación anterior y las colisiones conservan sus coordenadas.
 
 Consulta [la guía de presentación](docs/patio_visual.md) para conocer los módulos, probar controles táctiles en computadora y ajustar la luz. Ejecuta `godot --headless --path . --script res://tests/test_presentation.gd` para comprobar el aislamiento visual, la cámara, las poses, la interfaz contextual y los controles.
 

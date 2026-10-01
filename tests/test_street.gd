@@ -40,6 +40,7 @@ func _run() -> void:
 	var story = scene.get_node("PatioStory")
 	var player = scene.get_node("Nisa")
 	var companion = scene.get_node("Gela")
+	_finish_dialogue(story)
 	player.position = story.GATE_POSITION
 	story._interact()
 	_check(scene.zone == "patio", "El portón permite salir antes de completar el cuaderno.")
@@ -69,7 +70,7 @@ func _run() -> void:
 	_check(scene.zone == "street" and companion.following, "No se sale a la calle con Gela.")
 	_check(session.store.load_game()["scene"] == "street", "El cambio de escenario no se guardó.")
 	_check(player.test_move(player.transform, Vector2(0, -200)), "Las casas de la calle no bloquean el paso.")
-	player.position = Vector2(264, 143)
+	player.position = Vector2(231, 180)
 	companion.position = Vector2(183, 143)
 	companion.path_timer = 0.0
 	var crossed_fountain := false
@@ -77,7 +78,7 @@ func _run() -> void:
 		await physics_frame
 		crossed_fountain = crossed_fountain or scene.FOUNTAIN_BOUNDS.grow(3.5).has_point(companion.position)
 	_check(not crossed_fountain, "Gela atraviesa la fuente en vez de rodearla.")
-	_check(companion.position.distance_to(player.position) <= 34.0, "Gela no sigue a Nisa alrededor de la fuente.")
+	_check(companion.guiding and companion.guide_arrived, "Gela no conduce a Nisa hasta la fuente.")
 	player.position = story.NEIGHBOR_POSITION + Vector2(0, 12)
 	story._interact()
 	_finish_dialogue(story)
@@ -85,7 +86,7 @@ func _run() -> void:
 	player.position = story.FOUNTAIN_POSITION + Vector2(0, 14)
 	story._interact()
 	_finish_dialogue(story)
-	_check(story.street_progress == 1, "No se registró el azulejo ausente.")
+	_check(story.street_progress == 1, "No se reconoció el lugar del cuento junto a la fuente.")
 	await _close_scene(scene)
 
 	scene = _open_scene()
