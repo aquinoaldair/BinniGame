@@ -8,13 +8,13 @@ La pista de Bixhozegola abre un recorrido breve: salir al pozo, seguir el sender
 
 ## Recorrido narrativo
 
-1. Hablar con Don Jacinto, bajo el huanacaxtle. Reconoce el cuento pero no logra recordar la palabra.
+1. Hablar con Don Jacinto, bajo el huanacaxtle. Reconoce el cuento pero al principio no logra recordar la palabra.
 2. Acercarse al claro frente al **otro árbol**, el palo de mango, y elegir «Usar resortera».
 3. Bajar tres mangos. Nisa ayuda mientras Gela observa; la iguana no resuelve la actividad ni habla.
-4. Volver a hablar con Jacinto. Recuerda a su madre contando el relato bajo el huanacaxtle y el contexto en que usaba la palabra.
+4. Volver a hablar con Jacinto. Recuerda a su madre contando el relato bajo el huanacaxtle y entrega la palabra, aún representada por `[PENDIENTE_DE_VERIFICACION]`.
 5. Regresar al pozo por la salida inferior izquierda, entrar al patio y compartir la pista con Bixhozegola.
 
-La anotación permanece como **[PENDIENTE_DE_VERIFICACION]**. El contexto del relato es ficción, no una tradición zapoteca documentada. La misión no completa la palabra ni el misterio.
+La anotación permanece como **[PENDIENTE_DE_VERIFICACION]**. El contexto del relato es ficción, no una tradición zapoteca documentada. Jacinto recupera la palabra dentro de la ficción, pero su forma real aún requiere verificación. La abuela no la reconoce aislada: esto inicia la [búsqueda del contexto](context_memory.md).
 
 ## Resortera
 
@@ -44,3 +44,11 @@ Ramas y tronco tienen sonidos distintos. Las ramas se sacuden y desprenden unas 
 `godot --headless --path . --script res://tests/test_slingshot_mode.gd` comprueba bordes, orientación, pantalla propia, carga táctil, dedos adicionales, trayectoria curva, potencia, viento, impactos, caída y restauración.
 
 Se revisaron capturas reales de Godot a 960×540 para zona, diálogo y apuntado. Falta validar controles táctiles, rendimiento y audio en un móvil real.
+
+## Repetición y sonido
+
+La resortera permanece disponible junto al árbol después de completar la misión, incluso al volver con una partida guardada. Cada ronda repone tres mangos y varía sus posiciones dentro de regiones separadas de la copa. Rejugar no modifica el progreso narrativo ni vuelve a entregar el recuerdo. Al soltar la piedra suena un efecto breve de goma, con tono según la potencia; se conservan los sonidos de impacto y caída.
+
+## Portón del patio
+
+El primer cruce conserva la interacción y el diálogo. Una vez realizada esa salida, acercarse al extremo superior del sendero del patio o al extremo inferior de la entrada del pozo cambia de zona automáticamente. `gate_opened` guarda ese desbloqueo; partidas anteriores lo recuperan si ya están fuera del patio o tienen progreso del pozo. Los puntos de llegada quedan fuera del umbral para evitar cruces repetidos.

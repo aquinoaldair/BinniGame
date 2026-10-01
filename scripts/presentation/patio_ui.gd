@@ -6,6 +6,7 @@ var story: Node2D
 var help_button: Button
 var help_panel: PanelContainer
 var help_text: Label
+var music_button: Button
 var active := false
 var help_open := false
 var last_objective := ""
@@ -31,12 +32,25 @@ func _ready() -> void:
 	help_panel.size = Vector2(286, 70)
 	help_panel.add_theme_stylebox_override("panel", _box(Color("293c36", 0.94), 9))
 	layer.add_child(help_panel)
+	var content := VBoxContainer.new()
+	help_panel.add_child(content)
 	help_text = Label.new()
 	help_text.custom_minimum_size = Vector2(260, 50)
 	help_text.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	help_text.add_theme_font_size_override("font_size", 10)
 	help_text.add_theme_color_override("font_color", Color("f1e4ca"))
-	help_panel.add_child(help_text)
+	content.add_child(help_text)
+	music_button = Button.new()
+	music_button.text = "Música: activada"
+	music_button.custom_minimum_size.y = 36
+	music_button.focus_mode = Control.FOCUS_NONE
+	_style_button(music_button)
+	music_button.pressed.connect(func():
+		var music = world.get_node("BackgroundMusic")
+		music.set_muted(not music.muted)
+		music_button.text = "Música: silenciada" if music.muted else "Música: activada"
+	)
+	content.add_child(music_button)
 	_sync_layout()
 
 

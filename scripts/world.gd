@@ -6,6 +6,7 @@ const PatioPresentation = preload("res://scripts/presentation/patio_presentation
 const PatioCamera = preload("res://scripts/presentation/patio_camera.gd")
 const PatioUI = preload("res://scripts/presentation/patio_ui.gd")
 const JacintoPresentation = preload("res://scripts/presentation/jacinto_presentation.gd")
+const BackgroundMusic = preload("res://scripts/presentation/background_music.gd")
 const StreetPresentation = preload("res://scripts/presentation/street_presentation.gd")
 
 @export var modern_patio_enabled := true
@@ -70,6 +71,10 @@ func _ready() -> void:
 	camera.world = self
 	camera.player = get_node("Nisa")
 	add_child(camera)
+	var music := BackgroundMusic.new()
+	music.name = "BackgroundMusic"
+	music.world = self
+	add_child(music)
 	var ui := PatioUI.new()
 	ui.name = "PatioUI"
 	ui.world = self

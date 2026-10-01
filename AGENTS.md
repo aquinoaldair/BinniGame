@@ -169,6 +169,10 @@ Run `godot --headless --path . --script res://tests/test_gela_art.gd` for compan
 
 Run `godot --headless --path . --script res://tests/test_gela_intro.gd` for Gela's entrance and temporary guiding behavior. A rustle announces her during notebook reading. After the encounter she leads to the gate, then the fountain, waiting for Nisa and pausing during dialogue. Derive guiding from existing committed progress without new save fields; resume normal following after examining the fountain. `gela_encounter.gd` supplies presentation-only leaves and a short local rustle sound. Her mysterious behavior is original fiction.
 
+Run `godot --headless --path . --script res://tests/test_background_music.gd` for music changes. `assets/audio/exploration.ogg` is an original synthetic ambient loop; see `assets/audio/README.md` for regeneration. Keep music continuous between zones, lower its volume during dialogue and slingshot play, and preserve the help-panel mute control. Do not attribute this composition to regional traditions.
+
+Run `godot --headless --path . --script res://tests/test_context_memory.gd` for the mission after Jacinto. `context_progress` and the two-bit `context_clues` are optional version 2 fields. Both observations can be completed in any order; commit only when their dialogues close. Preserve old saves and keep the word marked for native-speaker verification. See `docs/context_memory.md`.
+
 ## Commit & Pull Request Guidelines
 
 Git history is unavailable in this checkout. Recommended commits use concise imperative subjects, such as `Fix touch action release`, and keep related changes together. Pull requests should explain the behavior changed, include verification steps, link relevant issues, and attach screenshots or recordings for visual changes.

@@ -47,6 +47,8 @@ var trail: Line2D
 var tree: Node2D
 var cover_leaf: Sprite2D
 var sound: AudioStreamPlayer
+var launch_sound: AudioStreamPlayer
+var base_target_points := PackedVector2Array()
 var fall_sound: AudioStreamPlayer
 var stone_texture: GradientTexture2D
 var transition: Tween
@@ -66,6 +68,7 @@ var last_impact := ""
 
 
 func _ready() -> void:
+	base_target_points = target_points.duplicate()
 	$Mode/Screen/Background.add_child(Ground.new())
 	tree = $Mode/Screen/MangoTree
 	Assets.shadow(tree, Vector2(215, 40), Vector2(tree_rect.get_center().x, tree_rect.end.y - 9))
@@ -110,6 +113,8 @@ func _ready() -> void:
 	$Mode/Screen/ProjectileLayer.add_child(reticle)
 	sound = _sound(120, 0.10)
 	fall_sound = _sound(65, 0.16)
+	launch_sound = _sound(850, 0.18, true)
+	launch_sound.volume_db = -12
 	overlay = $Mode/UI
 	input_area = Control.new()
 	input_area.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -177,7 +182,7 @@ func _label(at: Vector2, size: Vector2, font_size: int) -> Label:
 	return label
 
 
-func _sound(frequency: float, length: float) -> AudioStreamPlayer:
+func _sound(frequency: float, length: float, sweep := false) -> AudioStreamPlayer:
 	var audio := AudioStreamWAV.new()
 	audio.format = AudioStreamWAV.FORMAT_16_BITS
 	audio.mix_rate = 16000
@@ -186,7 +191,11 @@ func _sound(frequency: float, length: float) -> AudioStreamPlayer:
 	data.resize(count * 2)
 	for sample in range(count):
 		var envelope := exp(-float(sample) / (length * 2200))
-		data.encode_s16(sample * 2, int(sin(TAU * frequency * sample / audio.mix_rate) * envelope * 10000))
+		var seconds := float(sample) / audio.mix_rate
+		var phase := TAU * frequency * seconds
+		if sweep:
+			phase = TAU * frequency * (seconds - 0.4 * seconds * seconds / length)
+		data.encode_s16(sample * 2, int(sin(phase) * envelope * 10000))
 	audio.data = data
 	var speaker := AudioStreamPlayer.new()
 	speaker.stream = audio
@@ -212,11 +221,14 @@ func start() -> void:
 	for tween in falling_tweens:
 		if tween.is_running(): tween.kill()
 	falling_tweens.clear()
+	_randomize_targets()
 	for index in range(fruits.size()):
 		fruits[index].position = target_points[index]
 		fruits[index].rotation = 0
 		fruits[index].show()
-	if cover_leaf != null: cover_leaf.show()
+	if cover_leaf != null:
+		cover_leaf.position = target_points[1] - base_target_points[1]
+		cover_leaf.show()
 	aim = target_points[0]
 	if world != null:
 		player = world.get_node("Nisa")
@@ -241,6 +253,12 @@ func start() -> void:
 	transition = create_tween()
 	transition.tween_property(fade, "color:a", 0, 0.18)
 	set_process(true)
+
+
+func _randomize_targets() -> void:
+	# Separate canopy regions keep every fruit reachable and prevent overlap.
+	for index in range(base_target_points.size()):
+		target_points[index] = base_target_points[index] + Vector2(randf_range(-14, 14), randf_range(-10, 10))
 
 
 func begin_charge() -> void:
@@ -308,6 +326,8 @@ func fire() -> void:
 	busy = true
 	shots += 1
 	shot_power = power
+	launch_sound.pitch_scale = lerpf(0.85, 1.15, power)
+	launch_sound.play()
 	shot_wind = wind_force
 	shot_aim = aim
 	shot_start = pouch.position
@@ -490,7 +510,7 @@ func _release_actions() -> void:
 
 
 func _exit_tree() -> void:
-	for speaker in [sound, fall_sound]:
+	for speaker in [sound, fall_sound, launch_sound]:
 		if is_instance_valid(speaker):
 			speaker.stop()
 			speaker.stream = null

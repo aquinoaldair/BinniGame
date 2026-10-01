@@ -48,6 +48,9 @@ func _run() -> void:
 	var camera_position: Vector2 = camera.position
 	var map_position: Vector2 = player.position
 	game.start()
+	var first_layout: PackedVector2Array = game.target_points.duplicate()
+	for index in range(first_layout.size()):
+		_check(first_layout[index].distance_to(game.base_target_points[index]) <= 18, "Un mango sale de su región alcanzable.")
 	await create_timer(0.25).timeout
 	_check(game.active and game.mode.visible and game.screen.visible and not player.can_move and game.sling.polygon.size() > 0, "El modo no muestra su pantalla y resortera.")
 	var old_fruit: Vector2 = game.fruits[0].position
@@ -69,6 +72,7 @@ func _run() -> void:
 	_check(game.charge_finger == 3 and game.aim == touch.position, "Otro dedo sustituye el apuntado principal.")
 	touch.pressed = false
 	game._aim_input(touch)
+	_check(game.launch_sound.playing, "Lanzar la piedra no reproduce sonido.")
 	_check(game.busy and game.stone.visible and not game.charging, "Soltar no lanza la piedra.")
 	var launched: Vector2 = game.stone.position
 	await create_timer(0.16).timeout
@@ -107,6 +111,13 @@ func _run() -> void:
 	await create_timer(1.9).timeout
 	_check(not game.active and not game.mode.visible and player.can_move and story.jacinto_progress == 2, "El tercer mango no regresa al mapa y habilita el recuerdo.")
 	_check(camera.zoom == camera_zoom and camera.position == camera_position and player.position == map_position, "La transición final altera el encuadre del mapa.")
+	_check(story._nearby_action() == "Usar resortera", "La resortera deja de estar disponible después de ganar.")
+	story.jacinto_progress = story.JacintoProgress.SHARED
+	story._interact_jacinto("Usar resortera")
+	_check(game.active and game.target_points != first_layout and game.hits == 0 and game.fallen.is_empty(), "Rejugar no reinicia mangos o no cambia sus posiciones.")
+	game.cancel(true)
+	story.complete_mango_game()
+	_check(story.jacinto_progress == story.JacintoProgress.SHARED, "Rejugar retrocede el progreso narrativo.")
 	world.queue_free()
 	await process_frame
 	if failures == 0:

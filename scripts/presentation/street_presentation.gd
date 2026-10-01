@@ -9,6 +9,8 @@ var world: Node2D
 var houses: Array[Node2D] = []
 var trees: Array[Node2D] = []
 var occlusion_timer := 0.0
+var last_context_clues := -1
+var last_context_active := false
 
 
 func _ready() -> void:
@@ -59,6 +61,12 @@ func _process(delta: float) -> void:
 	visible = world.zone == "street" and world.modern_street_enabled
 	if not visible:
 		return
+	var story = world.get_node("PatioStory")
+	var context_active: bool = story.context_progress == story.ContextProgress.SEARCH
+	if last_context_clues != story.context_clues or last_context_active != context_active:
+		last_context_clues = story.context_clues
+		last_context_active = context_active
+		queue_redraw()
 	occlusion_timer += delta
 	if occlusion_timer < 1.0 / 12.0:
 		return
@@ -78,3 +86,18 @@ func _prop(kind: String, at: Vector2, extent: Vector2, variant: int) -> Node2D:
 	prop.seed_value = variant
 	add_child(prop)
 	return prop
+
+
+func _draw() -> void:
+	if not last_context_active:
+		return
+	var story = world.get_node("PatioStory")
+	var locations: Array[Vector2] = [story.MEMORY_BENCH, story.MEMORY_TREE]
+	for index in range(locations.size()):
+		if (last_context_clues & (1 << index)) != 0:
+			continue
+		var at := locations[index] + Vector2(0, 9)
+		draw_circle(at, 7, Color("293c36", 0.85))
+		draw_rect(Rect2(at - Vector2(3, 4), Vector2(6, 8)), Color("f1e4ca"), false, 1)
+		draw_line(at + Vector2(-1, -1), at + Vector2(2, -1), Color("f1e4ca"), 1)
+		draw_line(at + Vector2(-1, 2), at + Vector2(2, 2), Color("f1e4ca"), 1)

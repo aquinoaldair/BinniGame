@@ -14,6 +14,8 @@ const JACINTO_POSITION := Vector2(238, 174)
 const JACINTO_EXIT := Vector2(55, 225)
 const JACINTO_ROUTE := Vector2(440, 161)
 const MANGO_POSITION := Vector2(320, 204)
+const MEMORY_BENCH := Vector2(380, 186)
+const MEMORY_TREE := Vector2(68, 190)
 const NEIGHBOR_POSITION := Vector2(335, 156)
 
 enum Stage { MEET, SEARCH, RETURN, COMPLETE }
@@ -29,6 +31,7 @@ var dialogue_text: Label
 var next_button: Button
 var pending_companion := false
 var clue_received := false
+var gate_opened := false
 var street_progress := 0
 var pending_clue := false
 var pending_street_progress := -1
@@ -36,6 +39,11 @@ var pending_exit := false
 enum JacintoProgress { SEARCH, HELP, MANGOS_DOWN, MEMORY_RECEIVED, SHARED }
 var jacinto_progress := JacintoProgress.SEARCH
 var pending_jacinto_progress := -1
+enum ContextProgress { NONE, SEARCH, FRAGMENT, SHARED }
+var context_progress := ContextProgress.NONE
+var context_clues := 0 # Bit 0: bench; bit 1: tree.
+var pending_context_progress := -1
+var pending_context_clues := -1
 var next_clue_received := false
 var pending_next_clue := false
 var opening_intro_active := false
@@ -88,7 +96,11 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	if dialogue.is_empty() and player.can_move and not is_slingshot_active():
-		if next_clue_received and get_parent().zone == "street" and player.position.x >= 443 and absf(player.position.y - JACINTO_ROUTE.y) <= 17:
+		if gate_opened and get_parent().zone == "patio" and player.position.y <= 65 and absf(player.position.x - GATE_POSITION.x) <= 28:
+			_change_zone("street")
+		elif gate_opened and get_parent().zone == "street" and player.position.y >= 239 and absf(player.position.x - STREET_GATE.x) <= 28:
+			_change_zone("patio")
+		elif next_clue_received and get_parent().zone == "street" and player.position.x >= 443 and absf(player.position.y - JACINTO_ROUTE.y) <= 17:
 			_change_zone("jacinto")
 		elif get_parent().zone == "jacinto" and player.position.x <= 36 and absf(player.position.y - JACINTO_EXIT.y) <= 17:
 			_change_zone("street", true)
@@ -137,7 +149,7 @@ func _nearby_action() -> String:
 			return "Volver al pozo"
 		if player.position.distance_to(JACINTO_POSITION) <= INTERACTION_DISTANCE:
 			return "Hablar"
-		if jacinto_progress == JacintoProgress.HELP and player.position.distance_to(MANGO_POSITION) <= INTERACTION_DISTANCE:
+		if jacinto_progress >= JacintoProgress.HELP and player.position.distance_to(MANGO_POSITION) <= INTERACTION_DISTANCE:
 			return "Usar resortera"
 		return ""
 	if get_parent().zone == "street":
@@ -145,6 +157,11 @@ func _nearby_action() -> String:
 			return "Ir con don Jacinto"
 		if player.position.distance_to(STREET_GATE) <= INTERACTION_DISTANCE:
 			return "Volver"
+		if context_progress == ContextProgress.SEARCH:
+			if (context_clues & 1) == 0 and player.position.distance_to(MEMORY_BENCH) <= 23:
+				return "Comparar el banco"
+			if (context_clues & 2) == 0 and player.position.distance_to(MEMORY_TREE) <= 23:
+				return "Comparar el árbol"
 		if player.position.distance_to(FOUNTAIN_POSITION) <= INTERACTION_DISTANCE:
 			return "Examinar el pozo"
 		if player.position.distance_to(NEIGHBOR_POSITION) <= INTERACTION_DISTANCE:
@@ -241,10 +258,24 @@ func _interact() -> void:
 				elif jacinto_progress == JacintoProgress.MEMORY_RECEIVED:
 					pending_jacinto_progress = JacintoProgress.SHARED
 					_start_dialogue([
-						"Nisa: Don Jacinto recordó a su madre contando el relato bajo el huanacaxtle. La palabra aparecía cuando alguien volvía a contar lo que había escuchado.",
-						"Bixhozegola: Anotemos ese contexto. Todavía debemos confirmar la palabra y falta otra parte del relato.",
-						"Nisa: Ya tenemos otra pista. La próxima vez seguiremos buscando juntas."
+						"Nisa: Don Jacinto me dio esta palabra: [PENDIENTE_DE_VERIFICACION]. Su madre la decía al contar el relato bajo el huanacaxtle.",
+						"Bixhozegola: No la reconozco así, sola. Tal vez recuerde al escuchar la parte del cuento que la acompañaba.",
+						"Bixhozegola: Llévale el cuaderno a la vecina del pozo. Ella escuchaba el relato con nosotros.",
+						"Nisa: Voy a buscar lo que falta alrededor de la palabra. Vamos, Gela."
 					], Stage.COMPLETE)
+				elif jacinto_progress == JacintoProgress.SHARED:
+					if context_progress == ContextProgress.FRAGMENT:
+						pending_context_progress = ContextProgress.SHARED
+						_start_dialogue([
+							"Nisa: La vecina recordó: «Si una voz se pierde, busca a quien todavía la guarda. Nadie recuerda el camino a solas».",
+							"Bixhozegola: Eso sí me suena... El cuento seguía hacia Lidxi Gula. No bastaba decir una palabra: había que compartir lo que recordábamos.",
+							"Nisa: Entonces la palabra de Jacinto pertenece a un cuento más grande. Lo anotamos juntas, para que otra persona pueda continuarlo.",
+							"Bixhozegola: Hemos recuperado otra parte. Ahora podemos buscar por dónde seguía ese camino."
+						], stage)
+					elif context_progress == ContextProgress.SHARED:
+						_start_dialogue(["Bixhozegola: Ya anotamos el nuevo fragmento. La siguiente pista es el camino hacia Lidxi Gula."], stage)
+					else:
+						_start_dialogue(["Bixhozegola: La vecina del pozo puede ayudarte a recordar el cuento alrededor de la palabra. Llévale el cuaderno."], stage)
 				elif street_progress == 3:
 					if not next_clue_received:
 						pending_next_clue = true
@@ -261,6 +292,8 @@ func _interact() -> void:
 
 
 func _interact_street(action: String) -> void:
+	if _interact_context(action):
+		return
 	if action == "Examinar el pozo":
 		pending_street_progress = maxi(street_progress, 1)
 		_start_dialogue([
@@ -279,6 +312,48 @@ func _interact_street(action: String) -> void:
 			], stage)
 		else:
 			_start_dialogue(["Vecina: Cada persona recordaba una parte del cuento. Si recuerdo algo más, te lo contaré. Gracias por escuchar."], stage)
+
+
+func _interact_context(action: String) -> bool:
+	if jacinto_progress != JacintoProgress.SHARED:
+		return false
+	if action == "Comparar el banco" and context_progress == ContextProgress.SEARCH:
+		pending_context_clues = context_clues | 1
+		_start_dialogue([
+			"Nisa: El banco tiene el mismo respaldo que el dibujo del cuaderno. Hay varias personas sentadas, escuchando a otra.",
+			"Nisa: En el margen se alcanza a leer: «Si una voz se pierde...» Voy a copiarlo sin completar lo que falta."
+		], stage)
+	elif action == "Comparar el árbol" and context_progress == ContextProgress.SEARCH:
+		pending_context_clues = context_clues | 2
+		_start_dialogue([
+			"Gela espera a la sombra. Nisa: Este árbol también aparece en el dibujo, junto a las personas del banco.",
+			"Nisa: Al desplegar esta esquina de la página se ve: «...busca a quien todavía la guarda». Es otra parte del cuento."
+		], stage)
+	elif action == "Hablar":
+		match context_progress:
+			ContextProgress.NONE:
+				pending_context_progress = ContextProgress.SEARCH
+				_start_dialogue([
+					"Nisa: Jacinto recordó una palabra, pero la abuela no la reconoce. ¿Recuerda qué venía después?",
+					"Vecina: No toda la frase. Déjame ver el cuaderno... Esta página tiene un banco y el árbol de la entrada, a la izquierda del pozo.",
+					"Vecina: Compara los dibujos con esos lugares. Quizá los márgenes nos ayuden a recordar el orden.",
+					"Nisa: Revisaré los dos y volveré a contarle lo que encuentre."
+				], stage)
+			ContextProgress.SEARCH:
+				if context_clues == 3:
+					pending_context_progress = ContextProgress.FRAGMENT
+					_start_dialogue([
+						"Nisa: Encontré «Si una voz se pierde...» en el dibujo del banco y «...busca a quien todavía la guarda» junto al árbol.",
+						"Vecina: Sí, en ese orden. Y después decíamos: «Nadie recuerda el camino a solas».",
+						"Nisa: Ahora tiene sentido como parte del cuento. Lo anotaré con lo que recordó Jacinto y volveré con la abuela."
+					], stage)
+				else:
+					_start_dialogue(["Vecina: Compara los dibujos del banco y del árbol de la entrada. Después leeremos juntas los dos fragmentos."], stage)
+			_:
+				_start_dialogue(["Vecina: Lleva ese fragmento a Bixhozegola. Un recuerdo puede ayudar a despertar otro."], stage)
+	else:
+		return false
+	return true
 
 
 func _interact_jacinto(action: String) -> void:
@@ -302,8 +377,8 @@ func _interact_jacinto(action: String) -> void:
 				_start_dialogue([
 					"Don Jacinto: Gracias, Nisa. Esto me recordó las tardes de joven bajo ese huanacaxtle.",
 					"Don Jacinto: Mi madre contaba allí parte del cuento. Usaba esa palabra cuando alguien volvía a contar lo que había escuchado.",
-					"Don Jacinto: No recuerdo cómo se decía. Pero recuerdo su voz y que nosotros continuábamos el relato.",
-					"Nisa: Anotaré el contexto: [PENDIENTE_DE_VERIFICACION]. Le contaré a la abuela lo que recordó."
+					"Don Jacinto: Ahora recuerdo la palabra: [PENDIENTE_DE_VERIFICACION]. Mi madre la decía en esa parte del cuento.",
+					"Nisa: La anotaré junto a lo que me contó. Se la llevaré a la abuela."
 				], stage)
 			_:
 				_start_dialogue(["Don Jacinto: Gracias por los mangos. Cuéntale a Bixhozegola lo que recordamos; quizá ella reconozca otra parte."], stage)
@@ -318,6 +393,8 @@ func complete_mango_game() -> void:
 
 
 func _change_zone(next_zone: String, from_jacinto := false) -> void:
+	if get_parent().zone == "patio" and next_zone == "street":
+		gate_opened = true
 	get_parent().set_zone(next_zone)
 	player.position = Vector2(140, 220) if next_zone == "street" else Vector2(123, 88)
 	companion.position = Vector2(176, 225) if next_zone == "street" else Vector2(123, 124)
@@ -381,6 +458,12 @@ func _advance_dialogue() -> void:
 	if pending_jacinto_progress >= 0:
 		jacinto_progress = pending_jacinto_progress
 		pending_jacinto_progress = -1
+	if pending_context_progress >= 0:
+		context_progress = pending_context_progress
+		pending_context_progress = -1
+	if pending_context_clues >= 0:
+		context_clues = pending_context_clues
+		pending_context_clues = -1
 	if pending_next_clue:
 		next_clue_received = true
 		pending_next_clue = false
@@ -423,7 +506,13 @@ func _update_objective() -> void:
 						JacintoProgress.HELP: objective.text = "Ayuda a Don Jacinto a bajar los mangos."
 						JacintoProgress.MANGOS_DOWN: objective.text = "Habla con Don Jacinto después de bajar los mangos."
 						JacintoProgress.MEMORY_RECEIVED: objective.text = "Comparte con Bixhozegola el recuerdo de Don Jacinto."
-						JacintoProgress.SHARED: objective.text = "Nueva pista anotada · Palabra pendiente de verificación."
+						JacintoProgress.SHARED:
+							match context_progress:
+								ContextProgress.NONE: objective.text = "Pregunta a la vecina del pozo por el cuento que rodea la palabra."
+								ContextProgress.SEARCH:
+									objective.text = "Compara los dibujos del banco y del árbol de la entrada (%d/2)." % ((context_clues & 1) + ((context_clues >> 1) & 1)) if context_clues != 3 else "Vuelve con la vecina y une los dos fragmentos."
+								ContextProgress.FRAGMENT: objective.text = "Lleva el nuevo fragmento a Bixhozegola."
+								ContextProgress.SHARED: objective.text = "Fragmento reconstruido · La siguiente pista es el camino hacia Lidxi Gula."
 			elif get_parent().zone == "patio":
 				objective.text = "Comparte el fragmento con la abuela." if street_progress == 2 else "Sal por el portón con Gela y busca el pozo."
 			else:

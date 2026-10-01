@@ -42,6 +42,7 @@ func _run() -> void:
 	var companion = scene.get_node("Gela")
 	_finish_dialogue(story)
 	player.position = story.GATE_POSITION
+	await process_frame
 	story._interact()
 	_check(scene.zone == "patio", "El portón permite salir antes de completar el cuaderno.")
 	_finish_dialogue(story)
@@ -69,6 +70,19 @@ func _run() -> void:
 	await physics_frame
 	_check(scene.zone == "street" and companion.following, "No se sale a la calle con Gela.")
 	_check(session.store.load_game()["scene"] == "street", "El cambio de escenario no se guardó.")
+	_check(session.store.load_game()["gate_opened"], "No se guarda la primera apertura del portón.")
+	player.position = Vector2(story.STREET_GATE.x, 241)
+	player.facing = Vector2.DOWN
+	await process_frame
+	await process_frame
+	_check(scene.zone == "patio" and player.facing == Vector2.DOWN, "No vuelve automáticamente por el portón abierto.")
+	await process_frame
+	_check(scene.zone == "patio", "El punto de llegada vuelve a cruzar inmediatamente.")
+	player.position = story.GATE_POSITION
+	player.facing = Vector2.UP
+	await process_frame
+	await process_frame
+	_check(scene.zone == "street" and player.facing == Vector2.UP, "No sale automáticamente después de abrir el portón.")
 	_check(player.test_move(player.transform, Vector2(0, -200)), "Las casas de la calle no bloquean el paso.")
 	player.position = Vector2(231, 180)
 	companion.position = Vector2(183, 143)
@@ -95,6 +109,7 @@ func _run() -> void:
 	story = scene.get_node("PatioStory")
 	player = scene.get_node("Nisa")
 	companion = scene.get_node("Gela")
+	_check(story.gate_opened, "Continuar pierde la apertura del portón.")
 	_check(scene.zone == "street" and story.street_progress == 1 and companion.following, "Continuar perdió el escenario o la pista.")
 	player.position = story.NEIGHBOR_POSITION + Vector2(0, 12)
 	story._interact()

@@ -79,3 +79,7 @@ Consulta [la guía de Bixhozegola](docs/bixhozegola_design.md) para revisar recu
 Gela usa un atlas ilustrado con cuerpo verde, vientre claro, cresta discreta y cola larga con bandas. Tiene ocho animaciones: tres poses de reposo y seis de caminata por dirección. Su tamaño y origen visual se ajustan en una capa separada del seguimiento y las colisiones, y conserva el diseño en la calle.
 
 Consulta [la guía de Gela](docs/gela_design.md) y ejecuta `godot --headless --path . --script res://tests/test_gela_art.gd`. Las partidas donde todavía no apareció usan el nuevo encuentro debajo del árbol; las que ya la descubrieron recuperan su ubicación guardada.
+
+## Música ambiental
+
+La exploración tiene un bucle instrumental original y suave. Continúa entre zonas y baja de volumen durante los diálogos y la resortera. Abre `?` para activar o silenciar la música durante la sesión. Detalles y regeneración en `assets/audio/README.md`.

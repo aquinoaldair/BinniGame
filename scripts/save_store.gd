@@ -94,6 +94,9 @@ func _is_valid(data: Variant) -> bool:
 		return false
 	if (progress > 0 or data["scene"] == "street") and not data["clue_received"]:
 		return false
+	var gate_opened: Variant = data.get("gate_opened", false)
+	if not gate_opened is bool or (gate_opened and not data["clue_received"]):
+		return false
 	var next_clue: Variant = data.get("next_clue_received", false)
 	if not next_clue is bool or (next_clue and progress != 3):
 		return false
@@ -101,6 +104,16 @@ func _is_valid(data: Variant) -> bool:
 	if not _is_number(jacinto) or jacinto != floorf(jacinto) or jacinto < 0 or jacinto > 4:
 		return false
 	if (jacinto > 0 or data["scene"] == "jacinto") and not next_clue:
+		return false
+	var context: Variant = data.get("context_progress", 0)
+	var clues: Variant = data.get("context_clues", 0)
+	if not _is_number(context) or context != floorf(context) or context < 0 or context > 3:
+		return false
+	if not _is_number(clues) or clues != floorf(clues) or clues < 0 or clues > 3:
+		return false
+	if (context > 0 or clues > 0) and jacinto != 4:
+		return false
+	if (context == 0 and clues != 0) or (context >= 2 and clues != 3):
 		return false
 	return true
 

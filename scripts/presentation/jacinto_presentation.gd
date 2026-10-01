@@ -82,9 +82,8 @@ func _process(delta: float) -> void:
 	visible = world.zone == "jacinto"
 	if minigame.active and not visible:
 		minigame.cancel(true)
-	var story = world.get_node("PatioStory")
 	for fruit in map_fruits:
-		fruit.visible = visible and story.jacinto_progress < story.JacintoProgress.MANGOS_DOWN
+		fruit.visible = visible
 	if not visible:
 		return
 	occlusion_timer += delta

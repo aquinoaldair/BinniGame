@@ -137,7 +137,7 @@ func _run() -> void:
 	_check(player.position.x > before.x, "Nisa no puede caminar tras terminar el minijuego.")
 	player.position = story.JACINTO_POSITION + Vector2(0, 12)
 	story._interact()
-	_check(story.dialogue[0].contains("huanacaxtle") and story.dialogue[3].contains("[PENDIENTE_DE_VERIFICACION]"), "El recuerdo no conecta con el árbol o inventa la palabra.")
+	_check(story.dialogue[0].contains("huanacaxtle") and story.dialogue[2].contains("[PENDIENTE_DE_VERIFICACION]"), "El recuerdo no conecta con el árbol o inventa la palabra.")
 	story._advance_dialogue()
 	session._save_now()
 	await _close()
@@ -155,7 +155,7 @@ func _run() -> void:
 	player.position = story.FAMILY_POSITION + Vector2(0, 12)
 	story._interact()
 	_finish_dialogue()
-	_check(story.jacinto_progress == 4 and story.objective.text.contains("pendiente"), "Compartir la pista cierra prematuramente la palabra o no completa la misión.")
+	_check(story.jacinto_progress == 4 and story.context_progress == 0 and story.objective.text.contains("vecina"), "Compartir la palabra no habilita la búsqueda del contexto.")
 	var invalid: Dictionary = session._capture_state()
 	invalid["next_clue_received"] = false
 	_check(session.store.write_game(invalid) == ERR_INVALID_DATA, "Se acepta progreso de Jacinto sin la misión activada.")
