@@ -89,6 +89,7 @@ func _run() -> void:
 	await process_frame
 	_check(world.controls.visible and story.action_button.text == "Hablar" and story.action_button.position == Vector2(368, 224), "Falta el botón contextual móvil.")
 	ui.mobile = false
+	world.modern_street_enabled = false
 	world.set_zone("street")
 	await process_frame
 	await process_frame

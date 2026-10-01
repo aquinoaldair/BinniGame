@@ -14,7 +14,7 @@ Primer prototipo jugable en Godot 4.7, escrito en GDScript.
 - Computadora: WASD o flechas del teclado.
 - Pantalla táctil: flechas semitransparentes en la esquina inferior izquierda.
 - Interacción: acércate a Bixhozegola junto al banco y presiona **E** o toca **Hablar**. Usa **E** o el botón del diálogo para avanzar y cerrar.
-- Compañera: un crujido y unas hojas anuncian a Gela al leer el cuaderno. Aparece debajo del árbol superior del jardín izquierdo después de terminar la entrega. Acércate y presiona **E** o toca **Saludar**: Gela invita a Nisa a seguirla hacia el portón y la fuente. Espera si Nisa se retrasa y se detiene durante los diálogos. Después de examinar la fuente, sigue a Nisa y descansa cerca como antes.
+- Compañera: un crujido y unas hojas anuncian a Gela al leer el cuaderno. Aparece debajo del árbol superior del jardín izquierdo después de terminar la entrega. Acércate y presiona **E** o toca **Saludar**: Gela invita a Nisa a seguirla hacia el portón y el pozo. Espera si Nisa se retrasa y se detiene durante los diálogos. Después de examinar el pozo, sigue a Nisa y descansa cerca como antes.
 
 ## Primer encuentro
 
@@ -24,7 +24,7 @@ Nisa se detiene durante las conversaciones. En el patio, consulta el objetivo y 
 
 ## Primer paseo
 
-Después de leer el recuerdo incompleto, Nisa pregunta cómo encontrar lo que falta y oye hojas bajo el árbol. Al acercarse, Gela mira hacia el portón; Nisa pregunta «¿Quieres que te siga?». La abuela le pide volver para contarle lo que encuentre. Sigue a Gela, acércate al portón y pulsa **E** o **Salir**. En la calle Gela se dirige a la fuente: Nisa reconoce el dibujo del cuaderno al examinarla. Pregunta a la vecina cómo continúa la frase y regresa con Bixhozegola. Al terminar de compartir el fragmento, el cielo se aclara ligeramente y vuelve una brisa; la palabra pendiente todavía necesita recuperarse.
+Después de leer el recuerdo incompleto, Nisa pregunta cómo encontrar lo que falta y oye hojas bajo el árbol. Al acercarse, Gela mira hacia el portón; Nisa pregunta «¿Quieres que te siga?». La abuela le pide volver para contarle lo que encuentre. Sigue a Gela, acércate al portón y pulsa **E** o **Salir**. En la calle Gela se dirige al pozo: Nisa reconoce el dibujo del cuaderno al examinarlo. Pregunta a la vecina cómo continúa la frase y regresa con Bixhozegola. Al terminar de compartir el fragmento, el cielo se aclara ligeramente y vuelve una brisa; la palabra pendiente todavía necesita recuperarse.
 
 El cuento y su relación con el cielo son ficción original del juego. No representan una tradición o creencia zapoteca verificada. La flor azul dejó de ser la pista narrativa. Los lugares no tienen nombres definitivos y no se han inventado traducciones en diidxazá. Consulta [la guía del nuevo inicio](docs/story_opening.md).
 
@@ -38,7 +38,7 @@ Si el archivo principal está dañado, Continuar intenta recuperar el respaldo. 
 
 Este relato es ficción provisional en español; no incluye traducciones ni representa una costumbre regional verificada.
 
-El patio sin nombre tiene dos casas con techos de teja, césped, senderos, jardineras y losetas rojizas. El portón conecta con una pequeña calle con casas, una fuente y una vecina. Las casas y la fuente bloquean el paso. Nisa, Bixhozegola y Gela usan sprites ilustrados. El patio combina materiales pintados en TileMapLayer y props ilustrados; la calle y la vecina conservan sus dibujos por código. El saludo y el seguimiento de la iguana son comportamientos ficticios del juego.
+El patio sin nombre tiene dos casas con techos de teja, césped, senderos, jardineras y losetas rojizas. El portón conecta con una pequeña calle con casas, un pozo y una vecina. Las casas y el pozo bloquean el paso. Nisa, Bixhozegola y Gela usan sprites ilustrados. El patio combina materiales pintados en TileMapLayer y props ilustrados; la calle reutiliza el mismo kit y añade un pozo y una vecina ilustradas. El saludo y el seguimiento de la iguana son comportamientos ficticios del juego.
 
 ## Prueba de integración
 
@@ -50,11 +50,11 @@ Ejecuta también `godot --headless --path . --script res://tests/test_save.gd` p
 
 `godot --headless --path . --script res://tests/test_story_opening.gd` recorre el inicio, verifica que el cielo y la brisa cambien solo al completar el primer recuerdo y comprueba la recuperación de conversaciones interrumpidas con guardados aislados.
 
-`godot --headless --path . --script res://tests/test_gela_intro.gd` comprueba el ruido, la invitación, la guía hacia el portón y la fuente, las esperas, la separación de Nisa y la recuperación al continuar en ambas zonas.
+`godot --headless --path . --script res://tests/test_gela_intro.gd` comprueba el ruido, la invitación, la guía hacia el portón y el pozo, las esperas, la separación de Nisa y la recuperación al continuar en ambas zonas.
 
 ## Prueba visual del patio
 
-El patio usa materiales de césped, tierra, piedra y barro con variaciones y bordes suaves; tres árboles ilustrados, plantas y macetas reutilizables; y casas separadas en fachada, aberturas, columnas y techo. La banca, silla, cubeta, escoba, vasijas y tendedero aportan vida cotidiana sin bloquear caminos. Conserva la cámara suave, sombras y luz cálida. Al inicio, las copas y telas permanecen quietas; su movimiento y dos hojas regresan después del primer recuerdo. Una mariposa pequeña sigue revoloteando. Todo el ambiente se pausa fuera del patio. La calle mantiene su presentación anterior y las colisiones conservan sus coordenadas.
+El patio usa materiales de césped, tierra, piedra y barro con variaciones y bordes suaves; tres árboles ilustrados, plantas y macetas reutilizables; y casas separadas en fachada, aberturas, columnas y techo. La banca, silla, cubeta, escoba, vasijas y tendedero aportan vida cotidiana sin bloquear caminos. Conserva la cámara suave, sombras y luz cálida. Al inicio, las copas y telas permanecen quietas; su movimiento y dos hojas regresan después del primer recuerdo. Una mariposa pequeña sigue revoloteando. Todo el ambiente se pausa fuera del patio. El área del pozo reutiliza este kit con una plazoleta irregular, casas variadas y un pozo por capas; las colisiones conservan sus coordenadas. Consulta [su diseño y verificación](docs/fountain_visual.md).
 
 Consulta [la guía de presentación](docs/patio_visual.md) para conocer los módulos, probar controles táctiles en computadora y ajustar la luz. Ejecuta `godot --headless --path . --script res://tests/test_presentation.gd` para comprobar el aislamiento visual, la cámara, las poses, la interfaz contextual y los controles.
 

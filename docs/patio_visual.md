@@ -1,6 +1,6 @@
 # Presentación ilustrada del patio
 
-Primera escena de referencia artística de BINNI: suelo pintado, árboles orgánicos, casas por capas y objetos domésticos. Conserva la distribución y función jugable del patio. La calle mantiene su presentación anterior. Consulta [la auditoría inicial](patio_audit.md) para revisar nodos, colisiones y coordenadas preservadas.
+Primera escena de referencia artística de BINNI: suelo pintado, árboles orgánicos, casas por capas y objetos domésticos. Conserva la distribución y función jugable del patio. La [calle y su fuente](fountain_visual.md) reutilizan el mismo kit ilustrado. Consulta [la auditoría inicial](patio_audit.md) para revisar nodos, colisiones y coordenadas preservadas.
 
 ![Patio completo renderizado en Godot; vista de revisión sin zoom](patio_preview.png)
 

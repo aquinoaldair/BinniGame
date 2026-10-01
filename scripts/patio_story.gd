@@ -113,7 +113,7 @@ func _nearby_action() -> String:
 		if player.position.distance_to(STREET_GATE) <= INTERACTION_DISTANCE:
 			return "Volver"
 		if player.position.distance_to(FOUNTAIN_POSITION) <= INTERACTION_DISTANCE:
-			return "Examinar"
+			return "Examinar el pozo"
 		if player.position.distance_to(NEIGHBOR_POSITION) <= INTERACTION_DISTANCE:
 			return "Hablar"
 		return ""
@@ -167,7 +167,7 @@ func _interact() -> void:
 			"Bixhozegola: Ve con cuidado, Nisa. Y vuelve a contarme qué encontraron."
 		], stage)
 	elif action == "Recoger":
-		_start_dialogue(["Nisa: Aquí está el cuaderno. Hay una fuente dibujada y una frase sin terminar. Se lo llevaré a la abuela."], Stage.RETURN)
+		_start_dialogue(["Nisa: Aquí está el cuaderno. Hay un pozo dibujado y una frase sin terminar. Se lo llevaré a la abuela."], Stage.RETURN)
 	elif action == "Hablar":
 		match stage:
 			Stage.MEET:
@@ -188,7 +188,7 @@ func _interact() -> void:
 				if companion.following and not clue_received:
 					pending_clue = true
 					_start_dialogue([
-						"Bixhozegola: Este dibujo señala la fuente donde nos reuníamos para escuchar el cuento.",
+						"Bixhozegola: Este dibujo señalal pozo donde nos reuníamos para escuchar el cuento.",
 						"Bixhozegola: Está al salir del patio. La vecina suele descansar cerca; quizá recuerde otro fragmento.",
 						"Nisa: Iré con Gela. Cuando regrese, te contaré lo que encontremos."
 					], Stage.COMPLETE)
@@ -204,15 +204,15 @@ func _interact() -> void:
 
 
 func _interact_street(action: String) -> void:
-	if action == "Examinar":
+	if action == "Examinar el pozo":
 		pending_street_progress = maxi(street_progress, 1)
 		_start_dialogue([
-			"Gela se detiene junto a la fuente. Nisa: ¡Es el lugar del dibujo! ¿Cómo supiste que debíamos venir aquí?",
+			"Gela se detiene junto al pozo. Nisa: ¡Es el lugar del dibujo! ¿Cómo supiste que debíamos venir aquí?",
 			"Nisa: En el margen dice: «Aquí nos reuníamos para escuchar el cuento». La vecina está cerca; voy a preguntarle."
 		], stage)
 	elif action == "Hablar":
 		if street_progress == 0:
-			_start_dialogue(["Vecina: ¿Buscas el lugar del cuaderno? Mira la fuente de cerca y compara el dibujo. Te espero aquí."], stage)
+			_start_dialogue(["Vecina: ¿Buscas el lugar del cuaderno? Miral pozo de cerca y compara el dibujo. Te espero aquí."], stage)
 		elif street_progress == 1:
 			pending_street_progress = 2
 			_start_dialogue([
@@ -312,17 +312,18 @@ func _update_objective() -> void:
 			elif street_progress == 3:
 				objective.text = "Primer recuerdo recuperado · Aún falta una palabra."
 			elif get_parent().zone == "patio":
-				objective.text = "Comparte el fragmento con la abuela." if street_progress == 2 else "Sal por el portón con Gela y busca la fuente."
+				objective.text = "Comparte el fragmento con la abuela." if street_progress == 2 else "Sal por el portón con Gela y buscal pozo."
 			else:
 				match street_progress:
-					0: objective.text = "Sigue a Gela y examina la fuente."
+					0: objective.text = "Sigue a Gela y examinal pozo."
 					1: objective.text = "Pregunta a la vecina cómo sigue el cuento."
 					2: objective.text = "Vuelve por el portón y habla con la abuela."
 
 
 func _draw() -> void:
 	if get_parent().zone == "street":
-		_draw_neighbor()
+		if not get_parent().modern_street_enabled:
+			_draw_neighbor()
 		return
 	if get_parent().modern_patio_enabled:
 		return

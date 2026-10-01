@@ -3,6 +3,13 @@ extends Node2D
 # Construcción por capas; sus colisiones permanecen en world.gd.
 const Assets = preload("res://scripts/presentation/patio_assets.gd")
 @export var small := false
+@export var custom_width := 0.0
+@export var custom_wall_height := 0.0
+@export var custom_roof_height := 0.0
+@export var wall_asset := ""
+@export var door_asset := ""
+@export var window_asset := ""
+@export var roof_asset := ""
 var roof: Sprite2D
 var facade: Node2D
 var projection: Rect2
@@ -13,20 +20,23 @@ func _ready() -> void:
 	# La casa inferior deja libre el acceso norte, junto al punto inicial de Nisa.
 	var wall_height := 16.0 if small else 55.0
 	var roof_height := 24.0 if small else 52.0
+	if custom_width > 0: width = custom_width
+	if custom_wall_height > 0: wall_height = custom_wall_height
+	if custom_roof_height > 0: roof_height = custom_roof_height
 	Assets.shadow(self, Vector2(width + 16, 20), Vector2(8, 5))
 	facade = Node2D.new()
 	facade.name = "Facade"
 	add_child(facade)
 	Assets.sprite(facade, "porch", Rect2(-width * 0.5 - 3, -3, width + 6, 11), "Porch")
-	Assets.sprite(facade, "wall_blue" if small else "wall_clay", Rect2(-width * 0.5, -wall_height, width, wall_height), "WallBase")
+	Assets.sprite(facade, wall_asset if not wall_asset.is_empty() else ("wall_blue" if small else "wall_clay"), Rect2(-width * 0.5, -wall_height, width, wall_height), "WallBase")
 	var openings := Node2D.new()
 	openings.name = "Openings"
 	facade.add_child(openings)
 	var door_height := wall_height - 4
-	Assets.sprite(openings, "door_wood" if small else "door_jade", Rect2(-door_height * 0.33, -door_height, door_height * 0.66, door_height), "Door")
+	Assets.sprite(openings, door_asset if not door_asset.is_empty() else ("door_wood" if small else "door_jade"), Rect2(-door_height * 0.33, -door_height, door_height * 0.66, door_height), "Door")
 	var window_size := Vector2(15, 10) if small else Vector2(30, 31)
 	for side in [-1.0, 1.0]:
-		Assets.sprite(openings, "window_shutters" if small else "window_bars", Rect2(Vector2(side * width * 0.29 - window_size.x * 0.5, -wall_height + (3 if small else 7)), window_size), "WindowLeft" if side < 0 else "WindowRight")
+		Assets.sprite(openings, window_asset if not window_asset.is_empty() else ("window_shutters" if small else "window_bars"), Rect2(Vector2(side * width * 0.29 - window_size.x * 0.5, -wall_height + (3 if small else 7)), window_size), "WindowLeft" if side < 0 else "WindowRight")
 	# Una única sombra de alero, sin luces por prop.
 	var eave := Polygon2D.new()
 	eave.name = "EaveShadow"
@@ -39,7 +49,7 @@ func _ready() -> void:
 	for side in [-1.0, 1.0]:
 		Assets.sprite(supports, "column", Rect2(side * (width * 0.5 - 12) - 3.5, -wall_height + 1, 7, wall_height + 3))
 	projection = Rect2(-width * 0.5 - 4, -wall_height - roof_height, width + 8, roof_height)
-	roof = Assets.sprite(self, "roof_small" if small else "roof_large", projection, "Roof")
+	roof = Assets.sprite(self, roof_asset if not roof_asset.is_empty() else ("roof_small" if small else "roof_large"), projection, "Roof")
 
 
 func update_occlusion(player_position: Vector2) -> void:

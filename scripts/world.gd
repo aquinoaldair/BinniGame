@@ -5,8 +5,10 @@ const SaveSession = preload("res://scripts/save_session.gd")
 const PatioPresentation = preload("res://scripts/presentation/patio_presentation.gd")
 const PatioCamera = preload("res://scripts/presentation/patio_camera.gd")
 const PatioUI = preload("res://scripts/presentation/patio_ui.gd")
+const StreetPresentation = preload("res://scripts/presentation/street_presentation.gd")
 
 @export var modern_patio_enabled := true
+@export var modern_street_enabled := true
 @export var preview_touch_controls := false
 var hint: Label
 var controls: Control
@@ -53,6 +55,10 @@ func _ready() -> void:
 	presentation.name = "PatioPresentation"
 	presentation.world = self
 	add_child(presentation)
+	var street := StreetPresentation.new()
+	street.name = "StreetPresentation"
+	street.world = self
+	add_child(street)
 	var camera := PatioCamera.new()
 	camera.name = "PatioCamera"
 	camera.world = self
@@ -73,7 +79,8 @@ func _ready() -> void:
 
 func _draw() -> void:
 	if zone == "street":
-		_draw_street()
+		if not modern_street_enabled:
+			_draw_street()
 		return
 	if modern_patio_enabled:
 		return
@@ -171,7 +178,7 @@ func _add_building_collision(bounds: Rect2) -> void:
 
 func set_zone(next_zone: String) -> void:
 	zone = next_zone
-	y_sort_enabled = zone == "patio" and modern_patio_enabled
+	y_sort_enabled = (zone == "patio" and modern_patio_enabled) or (zone == "street" and modern_street_enabled)
 	get_node("Nisa").sync_presentation()
 	_update_building_collisions()
 	_build_companion_grid()
@@ -221,7 +228,7 @@ func safe_save_position(point: Vector2) -> Vector2:
 
 
 func _draw_street() -> void:
-	# Calle ficticia; el detalle ausente de la fuente pertenece a la historia del juego.
+	# Calle ficticia; el detalle ausente del pozo pertenece a la historia del juego.
 	draw_rect(Rect2(0, 0, 480, 270), Color("454943"))
 	draw_rect(Rect2(25, 47, 430, 208), Color("c2ae86"))
 	_draw_path(Rect2(34, 118, 410, 30))
@@ -237,17 +244,15 @@ func _draw_street() -> void:
 	_draw_shrub(Vector2(59, 175), 12, Color("d5649b"), 2)
 	draw_rect(Rect2(320, 179, 39, 7), Color("704b32"))
 	draw_line(Vector2(321, 177), Vector2(358, 177), Color("bc9362"), 2)
-	# Fuente baja: azulejos azules alrededor y un hueco sin dibujo al frente.
+	# Alternativa técnica del mismo pozo, con el brocal original.
 	draw_circle(Vector2(225, 139), 21, Color(0.2, 0.18, 0.14, 0.25))
 	draw_circle(Vector2(225, 135), 20, Color("dbd0b3"))
-	draw_circle(Vector2(225, 135), 15, Color("56868c"))
-	draw_circle(Vector2(225, 135), 9, Color("7fa6a0"))
-	for tile in range(9):
-		var angle := TAU * tile / 9.0
-		var point := Vector2(225, 135) + Vector2(cos(angle), sin(angle)) * 18
-		draw_rect(Rect2(point - Vector2(2, 2), Vector2(4, 4)), Color("315b82"))
-	draw_rect(Rect2(219, 151, 12, 7), Color("aaa08a"))
-	draw_rect(Rect2(220, 152, 10, 5), Color("c7bfa9"), false, 1)
+	draw_circle(Vector2(225, 135), 14, Color("302920"))
+	for post_x in [207, 243]:
+		draw_rect(Rect2(post_x - 2, 99, 4, 37), Color("805638"))
+	draw_line(Vector2(205, 101), Vector2(245, 101), Color("946b43"), 4)
+	draw_circle(Vector2(225, 105), 3, Color("615747"))
+	draw_line(Vector2(225, 108), Vector2(225, 137), Color("c4aa79"), 1)
 	# Entrada de regreso al patio, marcada con el mismo portón oscuro.
 	draw_rect(Rect2(105, 246, 72, 7), Color("282c29"))
 	for slat in range(9):

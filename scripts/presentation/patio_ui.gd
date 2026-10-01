@@ -41,7 +41,7 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	var modern: bool = world.zone == "patio" and world.modern_patio_enabled
+	var modern: bool = (world.zone == "patio" and world.modern_patio_enabled) or (world.zone == "street" and world.modern_street_enabled)
 	if modern != active:
 		_sync_layout()
 	if not active:
@@ -62,7 +62,7 @@ func _process(_delta: float) -> void:
 
 
 func _sync_layout() -> void:
-	active = world.zone == "patio" and world.modern_patio_enabled
+	active = (world.zone == "patio" and world.modern_patio_enabled) or (world.zone == "street" and world.modern_street_enabled)
 	help_button.visible = active
 	help_panel.visible = active and help_open
 	story.objective.visible = not active
