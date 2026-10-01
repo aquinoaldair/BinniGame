@@ -94,6 +94,9 @@ func _is_valid(data: Variant) -> bool:
 		return false
 	if (progress > 0 or data["scene"] == "street") and not data["clue_received"]:
 		return false
+	var next_clue: Variant = data.get("next_clue_received", false)
+	if not next_clue is bool or (next_clue and progress != 3):
+		return false
 	return true
 
 

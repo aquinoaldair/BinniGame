@@ -29,6 +29,8 @@ var street_progress := 0
 var pending_clue := false
 var pending_street_progress := -1
 var pending_exit := false
+var next_clue_received := false
+var pending_next_clue := false
 var opening_intro_active := false
 var memory_observation_active := false
 @onready var player = get_parent().get_node("Nisa")
@@ -188,7 +190,7 @@ func _interact() -> void:
 				if companion.following and not clue_received:
 					pending_clue = true
 					_start_dialogue([
-						"Bixhozegola: Este dibujo señalal pozo donde nos reuníamos para escuchar el cuento.",
+						"Bixhozegola: Este dibujo señala el pozo donde nos reuníamos para escuchar el cuento.",
 						"Bixhozegola: Está al salir del patio. La vecina suele descansar cerca; quizá recuerde otro fragmento.",
 						"Nisa: Iré con Gela. Cuando regrese, te contaré lo que encontremos."
 					], Stage.COMPLETE)
@@ -199,6 +201,17 @@ func _interact() -> void:
 						"Bixhozegola: Sí... Esa es una parte. La palabra en diidxazá aún nos falta, pero ya podemos seguir el recuerdo.",
 						"Nisa: Lo anotaré para que no se pierda otra vez. Seguiremos escuchando a los demás."
 					], Stage.COMPLETE)
+				elif street_progress == 3:
+					if not next_clue_received:
+						pending_next_clue = true
+						_start_dialogue([
+							"Nisa: Ya anoté lo que recordó la vecina. ¿Quién podría ayudarnos con la palabra que falta?",
+							"Bixhozegola: Ahora recuerdo a don Jacinto. Él también contaba ese cuento junto al pozo.",
+							"Bixhozegola: Vive junto al árbol grande. Pregúntale qué quería decir esa parte; quizá recuerde la palabra.",
+							"Nisa: Llevaré el cuaderno y escucharé cómo lo cuenta. Vamos, Gela."
+						], Stage.COMPLETE)
+					else:
+						_start_dialogue(["Bixhozegola: Busca a don Jacinto junto al árbol grande. Lleva el cuaderno; después podremos leerlo juntas."], Stage.COMPLETE)
 				else:
 					_start_dialogue(["Bixhozegola: Gracias por escucharme, Nisa. Seguiremos recordando juntas."], Stage.COMPLETE)
 
@@ -212,7 +225,7 @@ func _interact_street(action: String) -> void:
 		], stage)
 	elif action == "Hablar":
 		if street_progress == 0:
-			_start_dialogue(["Vecina: ¿Buscas el lugar del cuaderno? Miral pozo de cerca y compara el dibujo. Te espero aquí."], stage)
+			_start_dialogue(["Vecina: ¿Buscas el lugar del cuaderno? Mira el pozo de cerca y compara el dibujo. Te espero aquí."], stage)
 		elif street_progress == 1:
 			pending_street_progress = 2
 			_start_dialogue([
@@ -279,6 +292,9 @@ func _advance_dialogue() -> void:
 	if pending_clue:
 		clue_received = true
 		pending_clue = false
+	if pending_next_clue:
+		next_clue_received = true
+		pending_next_clue = false
 	var recovered_memory := pending_street_progress == 3 and street_progress < 3
 	if pending_street_progress >= 0:
 		street_progress = pending_street_progress
@@ -310,12 +326,12 @@ func _update_objective() -> void:
 			elif not clue_received:
 				objective.text = "Sigue a Gela hacia el portón."
 			elif street_progress == 3:
-				objective.text = "Primer recuerdo recuperado · Aún falta una palabra."
+				objective.text = "Busca a don Jacinto junto al árbol grande." if next_clue_received else "Habla con Bixhozegola sobre la palabra pendiente."
 			elif get_parent().zone == "patio":
-				objective.text = "Comparte el fragmento con la abuela." if street_progress == 2 else "Sal por el portón con Gela y buscal pozo."
+				objective.text = "Comparte el fragmento con la abuela." if street_progress == 2 else "Sal por el portón con Gela y busca el pozo."
 			else:
 				match street_progress:
-					0: objective.text = "Sigue a Gela y examinal pozo."
+					0: objective.text = "Sigue a Gela y examina el pozo."
 					1: objective.text = "Pregunta a la vecina cómo sigue el cuento."
 					2: objective.text = "Vuelve por el portón y habla con la abuela."
 

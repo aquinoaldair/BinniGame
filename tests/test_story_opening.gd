@@ -135,7 +135,7 @@ func _run() -> void:
 	await process_frame
 	_check(story.memory_observation_active and story.dialogue_text.text.contains("brisa") and world.get_node("PatioCamera").position.y == 96, "La recuperación no muestra el cielo y el regreso de la brisa.")
 	_check(story.street_progress == 3 and sky.memory_recovered and not ambience.wind_still, "Cerrar la conversación final no recupera el primer fragmento y la brisa.")
-	_check(sky.gradient.get_color(0) != original_color and story.objective.text.contains("Aún falta una palabra"), "El cielo no cambia o el objetivo da por resuelta la palabra pendiente.")
+	_check(sky.gradient.get_color(0) != original_color and story.objective.text.contains("palabra pendiente"), "El cielo no cambia o el objetivo da por resuelta la palabra pendiente.")
 	wind_time = ambience.wind_clock
 	ambience._process(0.2)
 	_check(ambience.wind_clock > wind_time and ambience.leaves[0].visible, "La brisa no vuelve después del primer recuerdo.")

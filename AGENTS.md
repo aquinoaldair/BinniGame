@@ -153,6 +153,8 @@ Run `godot --headless --path . --script res://tests/test_save.gd` for persistenc
 
 Run `godot --headless --path . --script res://tests/test_street.gd` for zone or story changes. Save version 2 migrates version 1 without losing the notebook or Gela. The gate requires notebook delivery and Gela's greeting. If the drawing clue is still missing, read it at the gate and exit when that dialogue closes; another conversation with the grandmother is optional.
 
+Run `godot --headless --path . --script res://tests/test_next_clue.gd` for the follow-up clue. `next_clue_received` commits only when the grandmother conversation closes, requires `street_progress == 3`, and defaults to false in older version 2 saves. Don Jacinto and his zone are planned, not yet playable; see `docs/next_memory.md`.
+
 Run `godot --headless --path . --script res://tests/test_story_opening.gd` for narrative opening changes. Nisa asks about the strange sky; the notebook holds an incomplete fictional story. Restore a gentle breeze only after sharing the neighbor's fragment (`street_progress == 3`), never during an unfinished dialogue. Keep save version 2 and replay the brief opening only while the first conversation remains incomplete. Do not invent the missing diidxazá word or attribute the sky story to verified Zapotec beliefs.
 
 Run `godot --headless --path . --script res://tests/test_presentation.gd` for presentation changes. Keep visual scale separate from collision bodies, preserve dialogue/state logic in `patio_story.gd`, and verify camera bounds, occlusion, contextual prompts, and the street fallback. Validate touch and performance on a real mobile device.
